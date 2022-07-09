@@ -6,8 +6,6 @@ const { NotFoundError } = require('./errors/NotFoundError');
 const service = new AirtableService()
 
 module.exports.handleEvent = async (event) => {
-  console.log(event)
-
   const webhookEvent = JSON.parse(event.body);
 
   // TODO: Validate event signature
