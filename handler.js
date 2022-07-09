@@ -9,7 +9,7 @@ module.exports.handleEvent = async (event) => {
   const webhookEvent = JSON.parse(event.body);
 
   console.log(webhookEvent)
-  
+
   // TODO: Validate event signature
   switch (webhookEvent["webhook_type"]) {
     case "check_in":
@@ -24,7 +24,7 @@ module.exports.handleEvent = async (event) => {
 async function checkIn(event) {
   const data = event["entity_data"]
   await service.addDog(data)
-  return { statusCode: 200 };
+  return { statusCode: 200 }; 
 }
 
 async function checkOut(event) {
