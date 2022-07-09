@@ -10,12 +10,12 @@ class AirtableService {
 
     async removeDog(animalId) {
         const recordId = await this.getRecordIdByAnimalId(animalId);
-        this.table.destroy(recordId)
+        await this.table.destroy(recordId)
     }
 
-    addDog(entityData) {
+    async addDog(entityData) {
         const record = this.entityToRecord(entityData)
-        this.table.create(record, {
+        await this.table.create(record, {
             typecast: true
         })
     }
