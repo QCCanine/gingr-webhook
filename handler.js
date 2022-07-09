@@ -6,18 +6,19 @@ const { NotFoundError } = require('./errors/NotFoundError');
 const service = new AirtableService()
 
 module.exports.handleEvent = async (event) => {
-  // TODO: Validate event signature
+  console.log(event)
 
-  switch (event["webhook_type"]) {
+  const webhookEvent = JSON.parse(event.body);
+
+  // TODO: Validate event signature
+  switch (webhookEvent["webhook_type"]) {
     case "check_in":
-      return checkIn(event)
+      return checkIn(webhookEvent)
     case "check_out":
-      return checkOut(event)
+      return checkOut(webhookEvent)
     default:
-      return { statusCode: 403 }
+      return { statusCode: 200 }
   }
-  
-  
 };
 
 async function checkIn(event) {
