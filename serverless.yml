@@ -4,10 +4,13 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs14.x
+  deploymentMethod: direct
+  stage: prod
+
 
 functions:
-  hello:
-    handler: handler.hello
+  handleEvent:
+    handler: handler.handleEvent
     environment: 
       AIRTABLE_API_KEY: ${ssm:/gingr-webhooks/airtable-api-key}
     events:
