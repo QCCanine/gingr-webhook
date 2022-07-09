@@ -1,0 +1,16 @@
+service: gingr-webhook
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  hello:
+    handler: handler.hello
+    environment: 
+      AIRTABLE_API_KEY: ${ssm:/gingr-webhooks/airtable-api-key}
+    events:
+      - httpApi:
+          path: /
+          method: get
