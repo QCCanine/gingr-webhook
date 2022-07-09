@@ -8,6 +8,8 @@ const service = new AirtableService()
 module.exports.handleEvent = async (event) => {
   const webhookEvent = JSON.parse(event.body);
 
+  console.log(webhookEvent)
+  
   // TODO: Validate event signature
   switch (webhookEvent["webhook_type"]) {
     case "check_in":
