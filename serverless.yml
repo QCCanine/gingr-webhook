@@ -22,6 +22,7 @@ functions:
     handler: handler.handleEvent
     environment: 
       AIRTABLE_API_KEY: ${ssm:/gingr-webhooks/airtable-api-key}
+      WEBHOOK_SIGNATURE_KEY: ${ssm:/gingr-webhooks/webhook-signature-key}
     events:
       - httpApi:
           path: /
