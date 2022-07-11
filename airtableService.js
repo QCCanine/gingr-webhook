@@ -27,7 +27,7 @@ class AirtableService {
             "Feeding": entityData["feeding_time","feeding_amount"],
             "Belongings": entityData["answer_1"],
             "Medication": entityData["medicines"],
-            "Lunch": entityData["feeding_time","feeding_amount"],
+            "Lunch": entityData["feeding_time"],
             "Kongs/Dental Chews": entityData["services_string"],
             "Grooming": entityData["services_string"],
             "Departure Date/Time": entityData["end_date_iso"]
