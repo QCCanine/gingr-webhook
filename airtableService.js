@@ -24,12 +24,12 @@ class AirtableService {
         return {
             "Animal Id": parseInt(entityData["animal_id"]),
             "Dog": entityData["animal_name"],
-            "Feeding": entityData["feeding_time","feeding_amount"],
+            "Feeding": `${entityData["feeding_time"]} ${entityData["feeding_amount"]}`,
             "Belongings": entityData["answer_1"],
             "Medication": entityData["medicines"],
-            "Lunch": entityData["feeding_time","feeding_amount"],
+            "Lunch": `${entityData["feeding_time"]} ${entityData["feeding_amount"]}`,
             "Kongs/Dental Chews": entityData["services_string"],
-            "Grooming": entityData["services_string"],
+            "Grooming Services": entityData["services_string"],
             "Departure Date/Time": entityData["end_date_iso"]
 
         }
