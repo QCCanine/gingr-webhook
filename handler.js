@@ -18,7 +18,6 @@ module.exports.handleEvent = async (event) => {
     }
   }
   
-  // TODO: Validate event signature
   switch (webhookEvent["webhook_type"]) {
     case "check_in":
       return checkIn(webhookEvent)
