@@ -1,10 +1,12 @@
 "use strict";
 
 var crypto = require('crypto');
-const { AirtableService } = require('./airtableService');
+const { AirtableService } = require('./services/airtableService');
 const { NotFoundError } = require('./errors/NotFoundError');
+const { GingrService } = require('./services/gingrService');
 
-const service = new AirtableService()
+const airtableService = new AirtableService()
+const gingrService = new GingrService()
 
 module.exports.handleEvent = async (event) => {
   const webhookEvent = JSON.parse(event.body);
@@ -40,14 +42,15 @@ function hasValidSignature(event) {
 
 async function checkIn(event) {
   const data = event["entity_data"]
-  await service.addDog(data)
+  const medications = await gingrService.getMedications(data['animal_id'])
+  await airtableService.addDog(data, medications)
   return { statusCode: 200 }; 
 }
 
 async function checkOut(event) {
   const animalId = event["entity_data"]["animal_id"]
   try {
-    await service.removeDog(animalId);
+    await airtableService.removeDog(animalId);
   } catch (err) {
     if (err instanceof NotFoundError) {
       return { statusCode: 403, body: err.message };

@@ -1,7 +1,7 @@
 "use strict";
 
 const Airtable = require('airtable')
-const { NotFoundError } = require('./errors/NotFoundError')
+const { NotFoundError } = require('../errors/NotFoundError')
 
 class AirtableService {
     constructor() {
@@ -13,20 +13,20 @@ class AirtableService {
         await this.table.destroy(recordId)
     }
 
-    async addDog(entityData) {
-        const record = this.entityToRecord(entityData)
+    async addDog(entityData, medications) {
+        const record = this.entityToRecord(entityData, medications)
         await this.table.create(record, {
             typecast: true
         })
     }
 
-    entityToRecord(entityData) {
+    entityToRecord(entityData, medications) {
         return {
             "Animal Id": parseInt(entityData["animal_id"]),
             "Dog": entityData["animal_name"],
             "Feeding": `${entityData["feeding_time"]} ${entityData["feeding_amount"]}`,
             "Belongings": entityData["answer_1"],
-            "Medication": entityData["medicines"],
+            "Medication": medications.join('\n'),
             "Lunch": `${entityData["feeding_time"]} ${entityData["feeding_amount"]}`,
             "Kongs/Dental Chews": entityData["services_string"],
             "Grooming Services": entityData["services_string"],
