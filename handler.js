@@ -48,8 +48,6 @@ async function checkIn(event) {
     gingrService.getFeedingSchedule(animalId)
   ])
 
-  console.log(feedingSchedule)
-
   await airtableService.addDog(data, medications, feedingSchedule)
   return { statusCode: 200 }; 
 }

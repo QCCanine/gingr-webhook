@@ -62,9 +62,6 @@ class GingrService {
             const unit = v['feedingUnit']['label']
             const instructions = v['feedingInstructions']
             const feedingStr = `${amount} ${unit} ${sched}`
-            console.log(feedingStr)
-            console.log(instructions)
-            console.log(instructions != null ? `${feedingStr}: ${instructions}` : feedingStr)
 
             return { ...acc, [sched]: instructions != null ? `${feedingStr}: ${instructions}` : feedingStr }
         }, {})

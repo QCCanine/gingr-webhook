@@ -31,8 +31,8 @@ class AirtableService {
             "Lunch": Lunch,
             "Kongs/Dental Chews": entityData["services_string"],
             "Grooming Services": entityData["services_string"],
-            "Departure Date/Time": entityData["end_date_iso"]
-
+            "Departure Date/Time": entityData["end_date_iso"],
+            "Type": entityData["type"],
         }
     }
 
