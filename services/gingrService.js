@@ -43,6 +43,34 @@ class GingrService {
             []
         )
     }
+
+    async getFeedingSchedule(animalId) {
+        const res = await this.client.get("/get_feeding_info", {
+            params: { 
+                animal_id: animalId
+            }
+        })
+
+        return this.formatFeedingSchedule(res.data)
+    }
+
+    formatFeedingSchedule(json) {
+        const data = json['0']['feedingSchedules']
+        return Object.values(data).reduce((acc, v) => {
+            const sched = v['feedingSchedule']['label']
+            const amount = v['feedingAmount']['label']
+            const unit = v['feedingUnit']['label']
+            const instructions = v['feedingInstructions']
+            const feedingStr = `${amount} ${unit} ${sched}`
+            console.log(feedingStr)
+            console.log(instructions)
+            console.log(instructions != null ? `${feedingStr}: ${instructions}` : feedingStr)
+
+            return { ...acc, [sched]: instructions != null ? `${feedingStr}: ${instructions}` : feedingStr }
+        }, {})
+    }
+
+    
 }
 
 module.exports = {

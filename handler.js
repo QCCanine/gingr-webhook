@@ -41,8 +41,16 @@ function hasValidSignature(event) {
 
 async function checkIn(event) {
   const data = event["entity_data"]
-  const medications = await gingrService.getMedications(data['animal_id'])
-  await airtableService.addDog(data, medications)
+  const animalId = data['animal_id']
+  
+  const [medications, feedingSchedule] = await Promise.all([
+    gingrService.getMedications(animalId),
+    gingrService.getFeedingSchedule(animalId)
+  ])
+
+  console.log(feedingSchedule)
+
+  await airtableService.addDog(data, medications, feedingSchedule)
   return { statusCode: 200 }; 
 }
 

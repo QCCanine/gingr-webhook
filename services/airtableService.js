@@ -13,21 +13,22 @@ class AirtableService {
         await this.table.destroy(recordId)
     }
 
-    async addDog(entityData, medications) {
-        const record = this.entityToRecord(entityData, medications)
+    async addDog(entityData, medications, feedingSchedule) {
+        const record = this.entityToRecord(entityData, medications, feedingSchedule)
         await this.table.create(record, {
             typecast: true
         })
     }
 
-    entityToRecord(entityData, medications) {
+    entityToRecord(entityData, medications, feedingSchedule) {
+        const { Lunch, ...feeding} = feedingSchedule
         return {
             "Animal Id": parseInt(entityData["animal_id"]),
             "Dog": entityData["animal_name"],
-            "Feeding": `${entityData["feeding_time"]} ${entityData["feeding_amount"]}`,
+            "Feeding": Object.values(feeding).join('\n'),
             "Belongings": entityData["answer_1"],
             "Medication": medications.join('\n'),
-            "Lunch": `${entityData["feeding_time"]} ${entityData["feeding_amount"]}`,
+            "Lunch": Lunch,
             "Kongs/Dental Chews": entityData["services_string"],
             "Grooming Services": entityData["services_string"],
             "Departure Date/Time": entityData["end_date_iso"]
