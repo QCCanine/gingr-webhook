@@ -1,7 +1,12 @@
 "use strict";
 
 const Airtable = require('airtable')
-const { NotFoundError } = require('../errors/NotFoundError')
+const { GingrService } = require('./gingrService');
+
+const gingrService = new GingrService()
+const opts = {
+    typecast: true
+}
 
 class AirtableService {
     constructor() {
@@ -9,15 +14,40 @@ class AirtableService {
     }
 
     async removeDog(animalId) {
-        const recordId = await this.getRecordIdByAnimalId(animalId);
-        await this.table.destroy(recordId)
+        const record = await this.getRecordByAnimalId(animalId);
+        if (record) {
+            await record.destroy();
+        }
     }
 
-    async addDog(entityData, medications, feedingSchedule) {
+    async addDog(entityData) {
+        const animalId = entityData['animal_id']
+        
+        const [medications, feedingSchedule] = await Promise.all([
+          gingrService.getMedications(animalId),
+          gingrService.getFeedingSchedule(animalId)
+        ])
+
         const record = this.entityToRecord(entityData, medications, feedingSchedule)
-        await this.table.create(record, {
-            typecast: true
-        })
+        await this.table.create(record, opts)
+    }
+
+    async updateDog(entityData) {
+        const animalId = data['animal_id']
+
+        const [medications, feedingSchedule, record] = await Promise.all([
+            gingrService.getMedications(animalId),
+            gingrService.getFeedingSchedule(animalId),
+            this.getRecordByAnimalId(animalId)
+        ]);
+
+        const recordData = this.entityToRecord(entityData, medications, feedingSchedule)
+
+        if (record) {
+            record.updateFields(recordData, opts)
+        } else {
+            await this.table.create(recordData, opts)
+        }
     }
 
     entityToRecord(entityData, medications, feedingSchedule) {
@@ -39,19 +69,15 @@ class AirtableService {
     /**
      * 
      * @param {Number} animalId Id of the animal from Gingr
-     * @returns {Promise<Number>} Id of the record in Airtable
+     * @returns {Promise<Record>} Record in Airtable
      */
-    async getRecordIdByAnimalId(animalId) {
+    async getRecordByAnimalId(animalId) {
         const records = await this.table.select({
             filterByFormula: `{Animal Id} = ${animalId}`,
             fields: []
         }).firstPage();
 
-        const record = records[0];
-        if(!record) {
-            throw new NotFoundError(`record for animal ${animalId} not found`)
-        }
-        return record["id"];
+        return records[0];
     }
 
 }

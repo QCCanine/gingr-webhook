@@ -2,11 +2,8 @@
 
 var crypto = require('crypto');
 const { AirtableService } = require('./services/airtableService');
-const { NotFoundError } = require('./errors/NotFoundError');
-const { GingrService } = require('./services/gingrService');
 
 const airtableService = new AirtableService()
-const gingrService = new GingrService()
 
 module.exports.handleEvent = async (event) => {
   const webhookEvent = JSON.parse(event.body);
@@ -23,6 +20,8 @@ module.exports.handleEvent = async (event) => {
       return checkIn(webhookEvent)
     case "check_out":
       return checkOut(webhookEvent)
+      case "animal_edited":
+        return animalEdited(webhookEvent)
     default:
       return { statusCode: 200 }
   }
@@ -41,28 +40,21 @@ function hasValidSignature(event) {
 
 async function checkIn(event) {
   const data = event["entity_data"]
-  const animalId = data['animal_id']
-  
-  const [medications, feedingSchedule] = await Promise.all([
-    gingrService.getMedications(animalId),
-    gingrService.getFeedingSchedule(animalId)
-  ])
+  await airtableService.addDog(data)
 
-  await airtableService.addDog(data, medications, feedingSchedule)
   return { statusCode: 200 }; 
 }
 
 async function checkOut(event) {
   const animalId = event["entity_data"]["animal_id"]
-  try {
-    await airtableService.removeDog(animalId);
-  } catch (err) {
-    if (err instanceof NotFoundError) {
-      return { statusCode: 403, body: err.message };
-    }
-
-    throw err;
-  }
+  await airtableService.removeDog(animalId);
   
+  return { statusCode: 200 };
+}
+
+async function animalEdited(event) {
+  const data = event["entity_data"]
+  await animalEdited(event)
+
   return { statusCode: 200 };
 }
