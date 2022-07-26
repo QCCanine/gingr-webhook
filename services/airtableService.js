@@ -23,8 +23,7 @@ class AirtableService {
     }
 
     async addDog(event) {
-        // const reservationId = event["entity_id"];
-        const reservationId = 24578
+        const reservationId = event["entity_id"];
         const data = event["entity_data"];
         const animalId = data["animal_id"];
 
