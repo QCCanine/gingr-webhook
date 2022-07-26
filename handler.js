@@ -54,7 +54,7 @@ async function checkOut(event) {
 
 async function animalEdited(event) {
   const data = event["entity_data"]
-  await animalEdited(event)
+  await airtableService.updateDog(data)
 
   return { statusCode: 200 };
 }

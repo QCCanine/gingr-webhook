@@ -28,12 +28,13 @@ class AirtableService {
           gingrService.getFeedingSchedule(animalId)
         ])
 
-        const record = this.entityToRecord(entityData, medications, feedingSchedule)
+        const record = this.reservationEventToRecord(entityData, medications, feedingSchedule)
         await this.table.create(record, opts)
     }
 
     async updateDog(entityData) {
-        const animalId = data['animal_id']
+        const animalId = entityData['a_id']
+        console.log(entityData)
 
         const [medications, feedingSchedule, record] = await Promise.all([
             gingrService.getMedications(animalId),
@@ -41,7 +42,7 @@ class AirtableService {
             this.getRecordByAnimalId(animalId)
         ]);
 
-        const recordData = this.entityToRecord(entityData, medications, feedingSchedule)
+        const recordData = this.animalEventToRecord(entityData, medications, feedingSchedule)
 
         if (record) {
             record.updateFields(recordData, opts)
@@ -50,10 +51,10 @@ class AirtableService {
         }
     }
 
-    entityToRecord(entityData, medications, feedingSchedule) {
+    reservationEventToRecord(entityData, medications, feedingSchedule) {
         const { Lunch, ...feeding} = feedingSchedule
         return {
-            "Animal Id": parseInt(entityData["animal_id"]),
+            "Animal Id": entityData["animal_id"],
             "Dog": entityData["animal_name"],
             "Feeding": Object.values(feeding).join('\n'),
             "Belongings": entityData["answer_1"],
@@ -63,6 +64,19 @@ class AirtableService {
             "Grooming Services": entityData["services_string"],
             "Departure Date/Time": entityData["end_date_iso"],
             "Type": entityData["type"],
+        }
+    }
+
+    animalEventToRecord(entityData, medications, feedingSchedule) {
+        const { Lunch, ...feeding} = feedingSchedule
+        return {
+            "Animal Id": entityData["a_id"],
+            "Dog": entityData["animal_name"],
+            "Feeding": Object.values(feeding).join('\n'),
+            "Medication": medications.join('\n'),
+            "Lunch": Lunch,
+            "Kongs/Dental Chews": entityData["services_string"],
+            "Grooming Services": entityData["services_string"],
         }
     }
 
