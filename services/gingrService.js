@@ -62,19 +62,20 @@ class GingrService {
             }
         })
 
-        return this.formatFeedingSchedule(res.data)
+        return res.data
     }
 
-    formatFeedingSchedule(json) {
-        const data = json['0']['feedingSchedules']
+    formatFeedingSchedule(formattedSchedule, isHouseFood) {
+        const data = formattedSchedule['0']['feedingSchedules']
         return Object.values(data).reduce((acc, v) => {
             const sched = v['feedingSchedule']['label']
             const amount = v['feedingAmount']['label']
             const unit = v['feedingUnit']['label']
-            const instructions = v['feedingInstructions']
+            const instructions = v['feedingInstructions'] !== null ? v['feedingInstructions'] : ''  
             const feedingStr = `${amount} ${unit} ${sched}`
+            const customInstructions = `${isHouseFood ? "House Food" : ""} ${instructions}  `
 
-            return { ...acc, [sched]: instructions != null ? `${feedingStr}: ${instructions}` : feedingStr }
+            return { ...acc, [sched]:  `${feedingStr}: ${customInstructions}` }
         }, {})
     }
 

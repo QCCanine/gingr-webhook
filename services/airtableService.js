@@ -33,8 +33,15 @@ class AirtableService {
         ])
 
         const services = reservations[`${reservationId}`]?.["services"];
+        const isHouseFood = services.find(service => {
+            service["name"] === "House Food"
+        })
 
-        const record = this.reservationEventToRecord(data, medications, feedingSchedule)
+
+        const formattedFeedingSchedule = gingrService.formatFeedingSchedule(feedingSchedule, !!isHouseFood)
+
+        const record = this.reservationEventToRecord(data, medications, formattedFeedingSchedule)
+
         await this.table.create(record, opts)
     }
 
