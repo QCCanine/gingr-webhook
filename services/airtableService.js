@@ -33,13 +33,13 @@ class AirtableService {
             gingrService.getCheckedInReservations(),
         ])
 
-        const services = reservations[`${reservationId}`]?.["services"];
-        const isHouseFood = services.find(service => {
+        const services = reservations[`${reservationId}`]?.["services"] || [];
+        const isHouseFood = !!services?.find(service => {
             service["name"] === "House Food"
         })
 
 
-        const formattedFeedingSchedule = gingrService.formatFeedingSchedule(feedingSchedule, !!isHouseFood)
+        const formattedFeedingSchedule = gingrService.formatFeedingSchedule(feedingSchedule, isHouseFood)
         const serviceTimes = this.getServiceTimes(services)
 
         const record = this.reservationEventToRecord(data, medications, formattedFeedingSchedule, serviceTimes)

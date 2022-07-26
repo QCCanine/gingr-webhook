@@ -73,9 +73,9 @@ class GingrService {
             const unit = v['feedingUnit']['label']
             const instructions = v['feedingInstructions'] !== null ? v['feedingInstructions'] : ''  
             const feedingStr = `${amount} ${unit} ${sched}`
-            const customInstructions = `${isHouseFood ? "House Food" : ""} ${instructions}  `
+            const customInstructions = `${isHouseFood ? "House Food " : ""}${instructions}`
 
-            return { ...acc, [sched]:  `${feedingStr}: ${customInstructions}` }
+            return { ...acc, [sched]:  `${feedingStr}${customInstructions ? ": " + customInstructions : customInstructions}` }
         }, {})
     }
 
