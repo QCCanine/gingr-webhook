@@ -1,0 +1,37 @@
+{
+    "version": "2.0",
+    "routeKey": "POST /",
+    "rawPath": "/",
+    "rawQueryString": "",
+    "headers": {
+      "accept": "application/json",
+      "content-length": "1665",
+      "content-type": "application/json",
+      "host": "gce3blrihj.execute-api.us-east-1.amazonaws.com",
+      "x-amzn-trace-id": "Root=1-62df3203-1b9a148c0f6a44b964420904",
+      "x-forwarded-for": "3.132.150.183",
+      "x-forwarded-port": "443",
+      "x-forwarded-proto": "https"
+    },
+    "requestContext": {
+      "accountId": "729164163900",
+      "apiId": "gce3blrihj",
+      "domainName": "gce3blrihj.execute-api.us-east-1.amazonaws.com",
+      "domainPrefix": "gce3blrihj",
+      "http": {
+        "method": "POST",
+        "path": "/",
+        "protocol": "HTTP/1.1",
+        "sourceIp": "3.132.150.183",
+        "userAgent": ""
+      },
+      "requestId": "V2TAkhmBIAMEJTQ=",
+      "routeKey": "POST /",
+      "stage": "$default",
+      "time": "26/Jul/2022:00:14:59 +0000",
+      "timeEpoch": 1658794499411
+    },
+    "body": "{\"webhook_url\":\"https://gce3blrihj.execute-api.us-east-1.amazonaws.com/\",\"webhook_type\":\"animal_edited\",\"entity_id\":\"382\",\"entity_type\":\"animal\",\"entity_data\":{\"a_id\":\"382\",\"animal_name\":\"Howard Phillips\",\"gender\":\"Male\",\"fixed\":\"1\",\"vip\":\"0\",\"medicines\":\"Medication Notes outside of med schedule\",\"allergies\":\"<p>n/a</p>\",\"image\":\"https://storage.googleapis.com/gingr-app-user-uploads/2020/06/26/5f51bcd0-b7b4-11ea-895c-f5efe6e8939a-Howie.jpg\",\"a_notes\":null,\"grooming_notes\":null,\"birthday\":\"1582520400\",\"breed_id\":\"300\",\"banned\":\"0\",\"weight\":\"20\",\"animal_weight\":\"20\",\"animal_created_at\":\"1571965202\",\"pricing_rules_apply\":\"1\",\"next_immunization_expiration\":\"1682481600\",\"feeding_notes\":\"\",\"feeding_method\":\"1\",\"feeding_type\":\"5\",\"method\":\"Feed alone\",\"code\":\"OP\",\"name\":\"Owner Provided\",\"o_id\":\"302\",\"o_first\":\"Zachary\",\"o_last\":\"Armistead\",\"address_1\":\"12345 My Address\",\"address_2\":null,\"city\":\"Charlotte\",\"state\":\"North Carolina\",\"zip\":\"28277\",\"email\":\"zarmist@g.clemson.edu\",\"home_phone\":null,\"cell_phone\":null,\"emergency_contact_name\":\"n/a\",\"emergency_contact_phone\":\"(000) 000-0000\",\"vet_id\":\"114\",\"vet_name\":\"Riverbend Veterinary PetCare Hospital\",\"vet_phone\":\"704-971-2075\",\"o_notes\":null,\"current_balance\":\"66.00\",\"home_location\":\"1\",\"stripe_customer_id\":null,\"barcode\":null,\"created_at\":\"1571965202\",\"breed_name\":\"Bernese Mountain Dog\",\"species_id\":\"1\",\"species_name\":\"Dog\",\"temperment_type\":null,\"default_payment_method\":null,\"created_by\":\"Zak Armistead\",\"animal_created_by\":\"Zak Armistead\",\"feeding_time\":\"AM,Lunch,PM\",\"feeding_amount\":\"1.50,1.50,4.00\"},\"signature\":\"09c092971aea98c563ae1ee6e170ec51729ba2c1392bfea11f59461e6487cc59\",\"numberTries\":1}",
+    "isBase64Encoded": false
+}
+  
