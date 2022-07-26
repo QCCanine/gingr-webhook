@@ -34,8 +34,6 @@ class AirtableService {
 
         const services = reservations[`${reservationId}`]?.["services"];
 
-        console.log(services)
-
         const record = this.reservationEventToRecord(data, medications, feedingSchedule)
         await this.table.create(record, opts)
     }
@@ -72,6 +70,7 @@ class AirtableService {
             "Grooming Services": entityData["services_string"],
             "Departure Date/Time": entityData["end_date_iso"],
             "Type": entityData["type"],
+            "Checked In By": entityData["created_by"]
         }
     }
 
