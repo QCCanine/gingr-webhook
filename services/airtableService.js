@@ -37,9 +37,11 @@ class AirtableService {
             service["name"] === "House Food"
         })
 
+
         const formattedFeedingSchedule = gingrService.formatFeedingSchedule(feedingSchedule, !!isHouseFood)
 
         const record = this.reservationEventToRecord(data, medications, formattedFeedingSchedule)
+
         await this.table.create(record, opts)
     }
 
@@ -75,6 +77,7 @@ class AirtableService {
             "Grooming Services": entityData["services_string"],
             "Departure Date/Time": entityData["end_date_iso"],
             "Type": entityData["type"],
+            "Checked In By": entityData["created_by"]
         }
     }
 
