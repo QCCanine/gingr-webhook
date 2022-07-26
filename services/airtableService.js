@@ -20,15 +20,23 @@ class AirtableService {
         }
     }
 
-    async addDog(entityData) {
-        const animalId = entityData['animal_id']
+    async addDog(event) {
+        // const reservationId = event["entity_id"];
+        const reservationId = 24578
+        const data = event["entity_data"];
+        const animalId = data["animal_id"];
         
-        const [medications, feedingSchedule] = await Promise.all([
+        const [medications, feedingSchedule, reservations] = await Promise.all([
           gingrService.getMedications(animalId),
-          gingrService.getFeedingSchedule(animalId)
+          gingrService.getFeedingSchedule(animalId),
+          gingrService.getCheckedInReservations(),
         ])
 
-        const record = this.reservationEventToRecord(entityData, medications, feedingSchedule)
+        const services = reservations[`${reservationId}`]?.["services"];
+
+        console.log(services)
+
+        const record = this.reservationEventToRecord(data, medications, feedingSchedule)
         await this.table.create(record, opts)
     }
 

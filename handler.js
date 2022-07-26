@@ -39,8 +39,7 @@ function hasValidSignature(event) {
 }
 
 async function checkIn(event) {
-  const data = event["entity_data"]
-  await airtableService.addDog(data)
+  await airtableService.addDog(event)
 
   return { statusCode: 200 }; 
 }

@@ -1,4 +1,5 @@
 const axios = require('axios').default
+const FormData = require('form-data');
 
 class GingrService {
     constructor() {
@@ -8,6 +9,16 @@ class GingrService {
                 key: process.env.GINGR_API_KEY
             }
         })
+    }
+
+    async getCheckedInReservations() {
+        const data = new FormData();
+        data.append("checked_in", "true")
+        const res = await this.client.post("/reservations", data, {
+            headers: data.getHeaders()
+        })
+
+        return res.data["data"];
     }
 
     async getMedications(animalId) {
