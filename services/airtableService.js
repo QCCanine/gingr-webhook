@@ -2,6 +2,7 @@
 
 const Airtable = require('airtable')
 const { GingrService } = require('./gingrService');
+const chunk = require('lodash.chunk')
 
 const gingrService = new GingrService()
 const opts = {
@@ -10,11 +11,9 @@ const opts = {
 const groomingServices = new Set(["Basic Bath", "Nail Trim", "Brushing"])
 const treatServices = new Set(["Kong Treat", "Dental Chew"])
 
-class AirtableService {
-    constructor() {
-        this.table = new Airtable().base('appd02u10BuFuz904').table("Dogs")
-    }
+const table = new Airtable().base('appd02u10BuFuz904').table("Dogs")
 
+class AirtableService {
     async removeDog(animalId) {
         const record = await this.getRecordByAnimalId(animalId);
         if (record) {
@@ -34,38 +33,41 @@ class AirtableService {
         ])
 
         const services = reservations[`${reservationId}`]?.["services"] || [];
-        const isHouseFood = !!services?.find(service => {
-            service["name"] === "House Food"
-        })
 
-
-        const formattedFeedingSchedule = gingrService.formatFeedingSchedule(feedingSchedule, isHouseFood)
-        const serviceTimes = this.getServiceTimes(services)
-
-        const record = this.reservationEventToRecord(data, medications, formattedFeedingSchedule, serviceTimes)
-        await this.table.create(record, opts)
+        const record = this.reservationEventToRecord(data, medications, feedingSchedule, services)
+        await table.create(record, opts)
     }
 
     async updateDog(entityData) {
         const animalId = entityData['a_id']
 
-        const [medications, feedingSchedule, record] = await Promise.all([
+        const [medications, feedingSchedule, reservations, record] = await Promise.all([
             gingrService.getMedications(animalId),
             gingrService.getFeedingSchedule(animalId),
-            this.getRecordByAnimalId(animalId)
+            gingrService.getCheckedInReservations(),
+            this.getRecordByAnimalId(animalId),
         ]);
 
-        const recordData = this.animalEventToRecord(entityData, medications, feedingSchedule)
+        const services = 
+            Object.values(reservations).map(r => r.animal.id == animalId)?.["services"] || [];
+
+        const recordData = this.animalEventToRecord(entityData, medications, feedingSchedule, services)
 
         if (record) {
             record.updateFields(recordData, opts)
         } else {
-            await this.table.create(recordData, opts)
+            await table.create(recordData, opts)
         }
     }
 
-    reservationEventToRecord(entityData, medications, feedingSchedule, serviceTimes) {
-        const { Lunch, ...feeding } = feedingSchedule
+    reservationEventToRecord(reservation, medications, feedingSchedule, services) {
+        const isHouseFood = !!services?.find(service => {
+            service["name"] === "House Food"
+        })
+
+        const { Lunch, ...feeding } = this.formatFeedingSchedule(feedingSchedule, isHouseFood)
+
+        const serviceTimes = this.getServiceTimes(services)
 
         const treats = Object.entries(serviceTimes.treat)
             .map(([name, times]) => {
@@ -83,22 +85,26 @@ class AirtableService {
             .join('\n')
 
         return {
-            "Animal Id": entityData["animal_id"],
-            "Dog": entityData["animal_name"],
+            "Animal Id": reservation["animal_id"],
+            "Dog": reservation["animal_name"],
             "Feeding": Object.values(feeding).join('\n'),
-            "Belongings": entityData["answer_1"],
+            "Belongings": reservation["answer_1"],
             "Medication": medications.join('\n'),
             "Lunch": Lunch,
             "Kongs/Dental Chews": treats,
             "Grooming Services": grooming,
-            "Departure Date/Time": entityData["end_date_iso"],
-            "Type": entityData["type"],
-            "Checked In By": entityData["created_by"]
+            "Departure Date/Time": reservation["end_date_iso"],
+            "Type": reservation["type"],
+            "Checked In By": reservation["created_by"]
         }
     }
 
-    animalEventToRecord(entityData, medications, feedingSchedule) {
-        const { Lunch, ...feeding } = feedingSchedule
+    animalEventToRecord(entityData, medications, feedingSchedule, services) {
+        const isHouseFood = !!services?.find(service => {
+            service["name"] === "House Food"
+        })
+
+        const { Lunch, ...feeding } = this.formatFeedingSchedule(feedingSchedule, isHouseFood)
         return {
             "Animal Id": entityData["a_id"],
             "Dog": entityData["animal_name"],
@@ -136,6 +142,20 @@ class AirtableService {
         const minutes = ('0' + t.getMinutes()).slice(-2)
         return `${this.formatShortDate(t)} ${hours}:${minutes}`
     }
+
+    formatFeedingSchedule(formattedSchedule, isHouseFood) {
+        const data = formattedSchedule['0']['feedingSchedules']
+        return Object.values(data).reduce((acc, v) => {
+            const sched = v['feedingSchedule']['label']
+            const amount = v['feedingAmount']['label']
+            const unit = v['feedingUnit']['label']
+            const instructions = v['feedingInstructions'] !== null ? v['feedingInstructions'] : ''  
+            const feedingStr = `${amount} ${unit} ${sched}`
+            const customInstructions = `${isHouseFood ? "House Food " : ""}${instructions}`
+
+            return { ...acc, [sched]:  `${feedingStr}${customInstructions ? ": " + customInstructions : customInstructions}` }
+        }, {})
+    }
     
 
     createOrAppend(obj, key, value) {
@@ -147,19 +167,48 @@ class AirtableService {
         return obj
     }
 
+    async getAllRecords() {
+        let records = []
+        await table.select().eachPage((page, next) => {
+            records = records.concat(page);
+            next();
+        })
+
+        return records;
+    }
+
     /**
      * 
      * @param {Number} animalId Id of the animal from Gingr
      * @returns {Promise<Record>} Record in Airtable
      */
     async getRecordByAnimalId(animalId) {
-        const records = await this.table.select({
+        const records = await table.select({
             filterByFormula: `{Animal Id} = ${animalId}`,
             fields: []
         }).firstPage();
 
         return records[0];
     }
+
+    async createRecords(records) {
+        chunk(records, 10).map(async recordChunk => {
+            await table.create(recordChunk, opts)
+        })
+    }
+
+    async updateRecords(records) {
+        chunk(records, 10).map(async recordChunk => {
+            await table.update(recordChunk, opts)
+        })
+    }
+
+    async deleteRecords(recordIds) {
+        chunk(recordIds, 10).map(async recordIdChunk => {
+            await table.destroy(recordIdChunk)
+        })
+    }
+
 
 }
 

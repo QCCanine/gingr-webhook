@@ -28,3 +28,15 @@ functions:
       - httpApi:
           path: /
           method: post
+
+  syncData:
+    handler: syncData.syncData
+    environment: 
+      AIRTABLE_API_KEY: ${ssm:/gingr-webhooks/airtable-api-key}
+      GINGR_API_KEY: ${ssm:/gingr-webhooks/gingr-api-key}
+    events:
+      - schedule:
+          name: sync-data
+          description: 'sync data every 5 minutes'
+          rate: cron(*/5 * * * ? *)
+    

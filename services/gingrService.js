@@ -65,20 +65,16 @@ class GingrService {
         return res.data
     }
 
-    formatFeedingSchedule(formattedSchedule, isHouseFood) {
-        const data = formattedSchedule['0']['feedingSchedules']
-        return Object.values(data).reduce((acc, v) => {
-            const sched = v['feedingSchedule']['label']
-            const amount = v['feedingAmount']['label']
-            const unit = v['feedingUnit']['label']
-            const instructions = v['feedingInstructions'] !== null ? v['feedingInstructions'] : ''  
-            const feedingStr = `${amount} ${unit} ${sched}`
-            const customInstructions = `${isHouseFood ? "House Food " : ""}${instructions}`
+    async getCheckedInReservationByAnimalId(animalId) {
+        const res = await this.client.get("/reservations_by_animal", {
+            params: { 
+                id: animalId,
+                restrict_to: "currently_checked_in"
+            }
+        })
 
-            return { ...acc, [sched]:  `${feedingStr}${customInstructions ? ": " + customInstructions : customInstructions}` }
-        }, {})
+        return res.data["data"].find(r => r.check_out_stamp === null);
     }
-
     
 }
 
