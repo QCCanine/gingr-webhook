@@ -95,7 +95,6 @@ class AirtableService {
             "Grooming Services": grooming,
             "Departure Date/Time": reservation["end_date_iso"],
             "Type": reservation["type"],
-            "Checked In By": reservation["created_by"]
         }
     }
 
