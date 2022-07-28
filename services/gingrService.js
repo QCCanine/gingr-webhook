@@ -23,7 +23,7 @@ class GingrService {
 
     async getMedications(animalId) {
         const res = await this.client.get("/get_medication_info", {
-            params: { 
+            params: {
                 animal_id: animalId
             }
         })
@@ -33,14 +33,14 @@ class GingrService {
 
     formatMedications(json) {
         const schedules = json["medicationSchedules"]
-            .reduce((a, v) => ({ ...a, [v.id]: v.time}), {})
+            .reduce((a, v) => ({ ...a, [v.id]: v.time }), {})
 
-        const keys = 
+        const keys =
             Object.keys(json["animal_medication_schedules"])
-            .map(k => parseInt(k))
-            .sort()
+                .map(k => parseInt(k))
+                .sort()
 
-        return keys.reduce((acc, k) => 
+        return keys.reduce((acc, k) =>
             acc.concat(
                 json["animal_medication_schedules"][k].map(med => {
                     const sched = schedules[k];
@@ -50,14 +50,14 @@ class GingrService {
                     const notes = med['medication_notes']['value'];
                     return `${amount} ${unit} ${type} ${sched}: ${notes}`
                 })
-            ), 
+            ),
             []
         )
     }
 
     async getFeedingSchedule(animalId) {
         const res = await this.client.get("/get_feeding_info", {
-            params: { 
+            params: {
                 animal_id: animalId
             }
         })
@@ -67,15 +67,19 @@ class GingrService {
 
     async getCheckedInReservationByAnimalId(animalId) {
         const res = await this.client.get("/reservations_by_animal", {
-            params: { 
+            params: {
                 id: animalId,
                 restrict_to: "currently_checked_in"
             }
         })
 
-        return res.data["data"].find(r => r.check_out_stamp === null);
+        const now = new Date()
+        return res.data["data"].find(r => 
+            new Date(r.end_date_formatted) >= now && 
+            new Date(r.start_date_formatted) <= now
+        );
     }
-    
+
 }
 
 module.exports = {

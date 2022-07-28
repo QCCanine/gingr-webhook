@@ -61,7 +61,7 @@ function reservationsToFields(reservations) {
     return Promise.all(
         reservations.map(async reservation => {
             const animalId = reservation.animal.id
-            const [medications, feedingSchedule, reservationAddtional] = await Promise.all([
+            const [medications, feedingSchedule, reservationAdditional] = await Promise.all([
                 gingrService.getMedications(animalId),
                 gingrService.getFeedingSchedule(animalId),
                 gingrService.getCheckedInReservationByAnimalId(animalId),
@@ -72,9 +72,9 @@ function reservationsToFields(reservations) {
             const reservationData = {
                 'animal_id': animalId,
                 'animal_name': reservation.animal.name,
-                'answer_1': reservationAddtional["answer_1"],
+                'answer_1': reservationAdditional["answer_1"],
                 'end_date_iso': reservation['start_date'],
-                'type': reservationAddtional["type"]
+                'type': reservationAdditional["type"]
             }
 
             return { fields: airtableService.reservationEventToRecord(reservationData, medications, feedingSchedule, services) }
