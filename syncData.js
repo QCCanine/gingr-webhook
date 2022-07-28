@@ -1,15 +1,12 @@
 "use strict";
 
-const { AirtableService } = require('./services/airtableService');
-const { GingrService } = require('./services/gingrService');
-
-const gingrService = new GingrService()
-const airtableService = new AirtableService()
+const { getAllRecords, createRecords, updateRecords, deleteRecords } = require('./services/airtableService');
+const { getCheckedInReservations, getMedications, getFeedingSchedule, getCheckedInReservationByAnimalId } = require('./services/gingrService');
 
 module.exports.syncData = async (event) => {
     const [records, reservations] = await Promise.all([
-        airtableService.getAllRecords(),
-        gingrService.getCheckedInReservations()
+        getAllRecords(),
+        getCheckedInReservations()
     ])
 
     const reservationsByAnimalId = Object.values(reservations)
@@ -26,32 +23,32 @@ module.exports.syncData = async (event) => {
 
         if (reservation) {
             //update animal with reservation
-            acc.toUpdate.push({record, reservation})
+            acc.toUpdate.push({ record, reservation })
         } else {
             // delete reservation
             acc.toDelete.push(record.id)
         }
         return acc
-    }, { toUpdate: [], toDelete: []})
+    }, { toUpdate: [], toDelete: [] })
 
-    const addRecords = reservationsToFields(Object.values(reservationsByAnimalId))
-        .then(airtableService.createRecords)
+    const addResponse = reservationsToFields(Object.values(reservationsByAnimalId))
+        .then(createRecords)
 
-    
-    const updateRecords = reservationsToFields(toUpdate.map(u => u.reservation))
+
+    const updateRespose = reservationsToFields(toUpdate.map(u => u.reservation))
         .then(recordData =>
             recordData.map((data, i) => {
-                return { id: toUpdate[i].record.id, ...data}
+                return { id: toUpdate[i].record.id, ...data }
             }
-        ))
-        .then(airtableService.updateRecords)
+            ))
+        .then(updateRecords)
 
-    const deleteRecords = airtableService.deleteRecords(toDelete)
+    const deleteResponse = deleteRecords(toDelete)
 
     await Promise.all[
-        addRecords,
-        updateRecords,
-        deleteRecords
+        addResponse,
+        updateRespose,
+        deleteResponse
     ]
 
     console.log("Sync complete")
@@ -62,10 +59,10 @@ function reservationsToFields(reservations) {
         reservations.map(async reservation => {
             const reservationId  = reservation.reservation_id
             const animalId = reservation.animal.id
-            const [medications, feedingSchedule, reservationAdditional] = await Promise.all([
-                gingrService.getMedications(animalId),
-                gingrService.getFeedingSchedule(animalId),
-                gingrService.getReservationAdditional(reservationId, animalId),
+            const [medications, feedingSchedule, reservationAddtional] = await Promise.all([
+                getMedications(animalId),
+                getFeedingSchedule(animalId),
+                getCheckedInReservationByAnimalId(animalId),
             ])
 
             const services = reservation["services"] || [];
@@ -78,7 +75,7 @@ function reservationsToFields(reservations) {
                 'type': reservationAdditional["type"]
             }
 
-            return { fields: airtableService.reservationEventToRecord(reservationData, medications, feedingSchedule, services) }
+            return { fields: reservationEventToRecord(reservationData, medications, feedingSchedule, services) }
 
         })
     )

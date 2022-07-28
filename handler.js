@@ -1,9 +1,7 @@
 "use strict";
 
 var crypto = require('crypto');
-const { AirtableService } = require('./services/airtableService');
-
-const airtableService = new AirtableService()
+const { addDog, updateDog, removeDog } = require('./services/airtableService');
 
 module.exports.handleEvent = async (event) => {
   const webhookEvent = JSON.parse(event.body);
@@ -39,21 +37,21 @@ function hasValidSignature(event) {
 }
 
 async function checkIn(event) {
-  await airtableService.addDog(event)
+  await addDog(event)
 
   return { statusCode: 200 }; 
 }
 
 async function checkOut(event) {
   const animalId = event["entity_data"]["animal_id"]
-  await airtableService.removeDog(animalId);
+  await removeDog(animalId);
   
   return { statusCode: 200 };
 }
 
 async function animalEdited(event) {
   const data = event["entity_data"]
-  await airtableService.updateDog(data)
+  await updateDog(data)
 
   return { statusCode: 200 };
 }
