@@ -1,5 +1,5 @@
-const axios = require('axios').default
-const FormData = require('form-data');
+import axios from 'axios';
+import FormData from 'form-data';
 
 const client = axios.create({
     baseURL: "https://queencitycanine.gingrapp.com/api/v1",
