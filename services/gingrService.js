@@ -65,7 +65,7 @@ class GingrService {
         return res.data
     }
 
-    async getCheckedInReservationByAnimalId(animalId) {
+    async getReservationAdditional(reservationId, animalId) {
         const res = await this.client.get("/reservations_by_animal", {
             params: {
                 id: animalId,
@@ -73,13 +73,8 @@ class GingrService {
             }
         })
 
-        const now = new Date()
-        return res.data["data"].find(r => 
-            new Date(r.end_date_formatted) >= now && 
-            new Date(r.start_date_formatted) <= now
-        );
+        return res.data["data"].find(r => r["r_id"] == reservationId);
     }
-
 }
 
 module.exports = {

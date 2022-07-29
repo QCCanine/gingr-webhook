@@ -60,11 +60,12 @@ module.exports.syncData = async (event) => {
 function reservationsToFields(reservations) {
     return Promise.all(
         reservations.map(async reservation => {
+            const reservationId  = reservation.reservation_id
             const animalId = reservation.animal.id
             const [medications, feedingSchedule, reservationAdditional] = await Promise.all([
                 gingrService.getMedications(animalId),
                 gingrService.getFeedingSchedule(animalId),
-                gingrService.getCheckedInReservationByAnimalId(animalId),
+                gingrService.getReservationAdditional(reservationId, animalId),
             ])
 
             const services = reservation["services"] || [];
