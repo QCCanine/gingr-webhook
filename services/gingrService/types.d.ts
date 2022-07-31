@@ -123,26 +123,26 @@ interface GetFeedingInfoResponse {
         value: string,
         label: string
     }>,
-    animal_id: string,
-    animal_medication_schedules: {
-        [medicationScheduleId: string]: Array<{
-            id: string,
-            medication_schedule_id: string,
-            medication_notes: {
-                value: string
-            },
-            medication_amount: {
-                value: string
-                value_string: string
-            },
-            medication_type: {
-                value: string
-                value_string: string
-            },
-            medication_unit: {
-                value: string
-                value_string: string
+    0: {
+        animal_id: string,
+        feedingSchedules: {
+            [feedingScheduleId: string]: {
+                id: string,
+                scheduleId: string,
+                feedingSchedule: {
+                    value: string,
+                    label: string
+                },
+                feedingInstructions: string,
+                feedingAmount: {
+                    value: string,
+                    label: string
+                },
+                feedingUnit: {
+                    value: string,
+                    label: string
+                }
             }
-        }>
+        }
     }
 }

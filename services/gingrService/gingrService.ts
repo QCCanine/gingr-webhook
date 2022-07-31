@@ -52,8 +52,8 @@ function formatMedications(json) {
     )
 }
 
-async function getFeedingInfo(animalId) {
-    const res = await client.get("/get_feeding_info", {
+async function getFeedingInfo(animalId: string): Promise<GetFeedingInfoResponse> {
+    const res = await client.get<GetFeedingInfoResponse>("/get_feeding_info", {
         params: {
             animal_id: animalId
         }
