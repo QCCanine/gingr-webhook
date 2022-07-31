@@ -60,3 +60,44 @@ interface GetReservationsResponseData {
         trasaction: Array<unknown>,
     }
 }
+
+interface GetMedicationsResponse {
+    medicationSchedules: Array<{
+        id: string,
+        time: string
+    }>,
+    medicationUnitOptions: Array<{
+        value: string,
+        label: string
+    }>,
+    medicationAmountOptions: Array<{
+        value: string,
+        label: string
+    }>,
+    medicationTypeOptions: Array<{
+        value: string,
+        label: string
+    }>,
+    animal_id: string,
+    animal_medication_schedules: {
+        [medicationScheduleId: string]: Array<{
+            id: string,
+            medication_schedule_id: string,
+            medication_notes: {
+                value: string
+            },
+            medication_amount: {
+                value: string
+                value_string: string
+            },
+            medication_type: {
+                value: string
+                value_string: string
+            },
+            medication_unit: {
+                value: string
+                value_string: string
+            }
+        }>
+    }
+}

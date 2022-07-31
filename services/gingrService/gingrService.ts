@@ -19,7 +19,7 @@ async function getCheckedInReservations(): Promise<GetReservationsResponseData> 
 }
 
 async function getMedications(animalId) {
-    const res = await client.get("/get_medication_info", {
+    const res = await client.get<GetMedicationsResponse>("/get_medication_info", {
         params: {
             animal_id: animalId
         }
