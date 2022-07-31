@@ -1,7 +1,7 @@
 "use strict";
 
 const Airtable = require('airtable')
-const { getMedications, getFeedingSchedule, getCheckedInReservations } = require('./gingrService/gingrService');
+const { getMedications, getFeedingInfo, getCheckedInReservations } = require('./gingrService/gingrService');
 const chunk = require('lodash.chunk')
 
 const opts = {
@@ -26,7 +26,7 @@ async function addDog(event) {
 
     const [medications, feedingSchedule, reservations] = await Promise.all([
         getMedications(animalId),
-        getFeedingSchedule(animalId),
+        getFeedingInfo(animalId),
         getCheckedInReservations(),
     ])
 
@@ -41,7 +41,7 @@ async function updateDog(entityData) {
 
     const [medications, feedingSchedule, reservations, record] = await Promise.all([
         getMedications(animalId),
-        getFeedingSchedule(animalId),
+        getFeedingInfo(animalId),
         getCheckedInReservations(),
         getRecordByAnimalId(animalId),
     ]);

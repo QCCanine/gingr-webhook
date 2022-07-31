@@ -1,7 +1,7 @@
 "use strict";
 
 const { getAllRecords, createRecords, updateRecords, deleteRecords } = require('./services/airtableService');
-const { getCheckedInReservations, getMedications, getFeedingSchedule, getCheckedInReservationByAnimalId } = require('./services/gingrService/gingrService');
+const { getCheckedInReservations, getMedications, getFeedingInfo, getCheckedInReservationByAnimalId } = require('./services/gingrService/gingrService');
 
 module.exports.syncData = async (event) => {
     const [records, reservations] = await Promise.all([
@@ -59,10 +59,10 @@ function reservationsToFields(reservations) {
         reservations.map(async reservation => {
             const reservationId  = reservation.reservation_id
             const animalId = reservation.animal.id
-            const [medications, feedingSchedule, reservationAddtional] = await Promise.all([
+            const [medications, feedingSchedule, reservationAdditional] = await Promise.all([
                 getMedications(animalId),
-                getFeedingSchedule(animalId),
-                getCheckedInReservationByAnimalId(animalId),
+                getFeedingInfo(animalId),
+                getReservationAdditional(reservationId, animalId),
             ])
 
             const services = reservation["services"] || [];

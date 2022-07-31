@@ -18,7 +18,7 @@ async function getCheckedInReservations(): Promise<GetReservationsResponseData> 
     return res.data.data;
 }
 
-async function getMedications(animalId) {
+async function getMedications(animalId: string) {
     const res = await client.get<GetMedicationsResponse>("/get_medication_info", {
         params: {
             animal_id: animalId
@@ -52,7 +52,7 @@ function formatMedications(json) {
     )
 }
 
-async function getFeedingSchedule(animalId) {
+async function getFeedingInfo(animalId) {
     const res = await client.get("/get_feeding_info", {
         params: {
             animal_id: animalId
@@ -77,6 +77,6 @@ async function getReservationAdditional(reservationId, animalId) {
 module.exports = {
     getCheckedInReservations,
     getMedications,
-    getFeedingSchedule,
+    getFeedingInfo: getFeedingInfo,
     getReservationAdditional
 }
