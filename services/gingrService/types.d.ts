@@ -57,7 +57,7 @@ interface GetReservationsResponseData {
             completed_at: string | null
         }>
         deposit: Array<unknown>,
-        trasaction: Array<unknown>,
+        transaction: Array<unknown>,
     }
 }
 
@@ -75,6 +75,51 @@ interface GetMedicationsResponse {
         label: string
     }>,
     medicationTypeOptions: Array<{
+        value: string,
+        label: string
+    }>,
+    animal_id: string,
+    animal_medication_schedules: {
+        [medicationScheduleId: string]: Array<{
+            id: string,
+            medication_schedule_id: string,
+            medication_notes: {
+                value: string
+            },
+            medication_amount: {
+                value: string
+                value_string: string
+            },
+            medication_type: {
+                value: string
+                value_string: string
+            },
+            medication_unit: {
+                value: string
+                value_string: string
+            }
+        }>
+    }
+}
+
+interface GetFeedingInfoResponse {
+    feedingSchedules: Array<{
+        id: string,
+        time: string
+    }>,
+    feedingMethodOptions: Array<{
+        value: string,
+        label: string
+    }>,
+    feedingUnitOptions: Array<{
+        value: string,
+        label: string
+    }>,
+    feedingAmountOptions: Array<{
+        value: string,
+        label: string
+    }>,
+    feedingTypeOptions: Array<{
         value: string,
         label: string
     }>,

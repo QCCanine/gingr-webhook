@@ -35,7 +35,7 @@ module.exports.syncData = async (event) => {
         .then(createRecords)
 
 
-    const updateRespose = reservationsToFields(toUpdate.map(u => u.reservation))
+    const updateResponse = reservationsToFields(toUpdate.map(u => u.reservation))
         .then(recordData =>
             recordData.map((data, i) => {
                 return { id: toUpdate[i].record.id, ...data }
@@ -47,7 +47,7 @@ module.exports.syncData = async (event) => {
 
     await Promise.all[
         addResponse,
-        updateRespose,
+        updateResponse,
         deleteResponse
     ]
 

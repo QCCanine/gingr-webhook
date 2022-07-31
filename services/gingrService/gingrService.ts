@@ -77,6 +77,6 @@ async function getReservationAdditional(reservationId, animalId) {
 module.exports = {
     getCheckedInReservations,
     getMedications,
-    getFeedingInfo: getFeedingInfo,
+    getFeedingInfo,
     getReservationAdditional
 }
