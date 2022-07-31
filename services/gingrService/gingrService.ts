@@ -8,14 +8,14 @@ const client = axios.create({
     }
 })
 
-async function getCheckedInReservations() {
+async function getCheckedInReservations(): Promise<GetReservationsResponseData> {
     const data = new FormData();
     data.append("checked_in", "true")
-    const res = await client.post("/reservations", data, {
+    const res = await client.post<GetReservationsResponse>("/reservations", data, {
         headers: data.getHeaders()
     })
-
-    return res.data["data"];
+    
+    return res.data.data;
 }
 
 async function getMedications(animalId) {

@@ -1,7 +1,7 @@
 "use strict";
 
 const Airtable = require('airtable')
-const { getMedications, getFeedingSchedule, getCheckedInReservations } = require('./gingrService');
+const { getMedications, getFeedingSchedule, getCheckedInReservations } = require('./gingrService/gingrService');
 const chunk = require('lodash.chunk')
 
 const opts = {
