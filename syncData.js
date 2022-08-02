@@ -71,7 +71,7 @@ function reservationsToFields(reservations) {
                 'animal_id': animalId,
                 'animal_name': reservation.animal.name,
                 'answer_1': reservationAdditional["answer_1"],
-                'end_date_iso': reservation['start_date'],
+                'end_date_iso': reservation['end_date'],
                 'type': reservationAdditional["type"]
             }
 
