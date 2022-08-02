@@ -1,9 +1,7 @@
-interface GingrResponse<T> {
+interface GetReservationsResponse {
     error: boolean,
-    data: T
+    data: GetReservationsResponseData
 }
-
-interface GetReservationsResponse extends GingrResponse<GetReservationsResponseData> {}
 
 interface GetReservationsResponseData {
     [reservationId: string]: {
@@ -145,4 +143,104 @@ interface GetFeedingInfoResponse {
             }
         }
     }
+}
+
+interface GetReservationsByAnimalIdResponse {
+    success: boolean,
+    data: Array<ReservationByAnimalId>
+}
+
+interface ReservationByAnimalId {
+    a_id: string,
+    animal_id: string,
+    animal_name: string,
+    gender: string,
+    fixed: string,
+    vip: string,
+    medicines: string,
+    image: string,
+    species_id: string,
+    a_notes: string,
+    grooming_notes: string | null,
+    birthday: string,
+    weight: string,
+    pricing_rules_apply: string,
+    next_immunization_expiration: string,
+    o_id: string,
+    o_first: string,
+    o_last: string,
+    address_1: string
+    address_2: string
+    city: string
+    state: string
+    zip: string
+    email: string
+    home_phone: string
+    cell_phone: string
+    emergency_contact_name: string,
+    emergency_contact_phone: string,
+    o_notes: string | null,
+    current_balance: string,
+    default_payment_method_fk: string | null,
+    stripe_customer_id: string,
+    vet_id: string,
+    vet_name: string,
+    vet_phone: string,
+    barcode: string | null,
+    r_id: string,
+    start_date: string,
+    end_date: string,
+    r_notes: string,
+    confirmed_stamp: string | null,
+    cancel_stamp: string | null,
+    check_in_stamp: string | null,
+    check_out_stamp: string | null,
+    wait_list_stamp: string | null,
+    wait_list_accepted_stamp: string | null,
+    location_id: string,
+    last_email_sent: string,
+    last_sms_sent: string | null,
+    class_id: string | null,
+    type_id: string,
+    self_made: string,
+    answer_1: string | null,
+    answer_2: string | null,
+    answer_3: string | null,
+    created_at: string,
+    base_rate: string,
+    final_rate: string,
+    units_of_time: string | null,
+    void_id: string | null,
+    created_by: string | null,
+    breed_id: string,
+    breed_name: string ,
+    feeding_method: string | null,
+    feeding_type: string | null,
+    feeding_notes: string | null,
+    temperment_type: string | null,
+    default_payment_method: string | null,
+    payment_amount: string | null,
+    type: string,
+    question_1: string | null,
+    question_2: string | null,
+    question_3: string | null,
+    charge_by_hour: string,
+    single_day: string,
+    only_appointment: string,
+    show_on_feeding_report: string,
+    show_on_medication_report: string,
+    account_code_id: string | null,
+    location_name: string,
+    location_city: string,
+    location_timezone: string | null,
+    cancellation_reason: string | null,
+    cancellation_reason_id: string | null,
+    cancelled_by_username: string | null,
+    services_string: string,
+    feeding_time: string,
+    feeding_amount: string,
+    check_in_stamp_formatted: string | null,
+    check_out_stamp_formatted: string | null,
+    start_date_formatted: string,
+    end_date_formatted: string
 }

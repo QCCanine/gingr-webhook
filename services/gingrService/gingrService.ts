@@ -62,15 +62,20 @@ async function getFeedingInfo(animalId: string): Promise<GetFeedingInfoResponse>
     return res.data
 }
 
-async function getReservationAdditional(reservationId, animalId) {
-    const res = await this.client.get("/reservations_by_animal", {
+async function getReservationAdditional(reservationId: string, animalId: string): Promise<ReservationByAnimalId> {
+    const res = await client.get<GetReservationsByAnimalIdResponse>("/reservations_by_animal", {
         params: {
             id: animalId,
             restrict_to: "currently_checked_in"
         }
     })
 
-    return res.data["data"].find(r => r["r_id"] == reservationId);
+    const reservation = res.data.data.find(r => r["r_id"] == reservationId);
+    if (reservation === undefined) {
+        throw new Error(`can't find reservation for { reservationId: ${reservationId}, animalId: ${animalId}`)
+    }
+
+    return reservation;
 }
 
 
