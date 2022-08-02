@@ -1,8 +1,7 @@
 "use strict";
 
 import { hasValidSignature, checkIn, checkOut, SUCCESS_RESPONSE } from "./controllers/webhook";
-import { GingrWebhook } from "./services/gingr/types";
-import {  updateDog, removeDog } from './services/airtableService';
+import { GingrWebhook } from "./clients/gingr/types";
 import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
 
 module.exports.handleEvent = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
@@ -30,10 +29,3 @@ module.exports.handleEvent = async (event: APIGatewayEvent): Promise<APIGatewayP
       return SUCCESS_RESPONSE
   }
 };
-
-// async function animalEdited(event) {
-//   const data = event["entity_data"]
-//   await updateDog(data)
-
-//   return { statusCode: 200 };
-// }

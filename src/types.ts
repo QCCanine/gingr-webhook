@@ -1,11 +1,14 @@
-interface Reservation {
+interface ReservationPartial {
     id: string,
     animal: Animal,
+    services: Array<Service>,
+    departureTime: Date,
+}
+
+interface Reservation extends ReservationPartial {
     feedingSchedules: Array<FeedingSchedule>
     medicationSchedules: Array<MedicationSchedule>,
-    services: Array<Service>,
-    belongings: string,
-    departureTime: Date,
+    belongings: string | null,
     type: string
 }
 

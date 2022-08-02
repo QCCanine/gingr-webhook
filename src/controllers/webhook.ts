@@ -1,11 +1,11 @@
 import { createHmac } from "crypto";
-import { GingerReservationWebhook, GingrWebhook } from "../services/gingr/types";
+import { GingerReservationWebhook, GingrWebhook } from "../clients/gingr/types";
 import { addDog, removeDog } from "../services/airtableService";
 import { APIGatewayProxyResult } from 'aws-lambda';
 
 export const SUCCESS_RESPONSE: APIGatewayProxyResult = { statusCode: 200, body: '' }
 
-export function hasValidSignature(event: GingrWebhook<any>) {
+export function hasValidSignature(event: GingrWebhook<any>): boolean {
     const key = process.env.WEBHOOK_SIGNATURE_KEY;
     if (key === undefined) {
         throw new Error("no key set in parameter store  to validate webhook")
@@ -32,3 +32,12 @@ export async function checkOut(event: GingerReservationWebhook): Promise<APIGate
 
     return SUCCESS_RESPONSE;
 }
+
+
+
+// async function animalEdited(event) {
+//   const data = event["entity_data"]
+//   await updateDog(data)
+
+//   return { statusCode: 200 };
+// }
