@@ -1,7 +1,7 @@
 import axios from 'axios';
 import FormData from 'form-data';
 
-import type { GetFeedingInfoResponse, GetMedicationsResponse, GetReservationsByAnimalIdResponse, GetReservationsResponse, GetReservationsResponseData, ReservationByAnimalId } from './types'
+import type { GetFeedingInfoResponse, GetMedicationsResponse, GetReservationsByAnimalIdResponse, GetReservationsResponse, GetReservationsResponseData, ReservationByAnimalIdData } from './types'
 
 const client = axios.create({
     baseURL: "https://queencitycanine.gingrapp.com/api/v1",
@@ -64,7 +64,7 @@ async function getFeedingInfo(animalId: string): Promise<GetFeedingInfoResponse>
     return res.data
 }
 
-async function getReservationAdditional(reservationId: string, animalId: string): Promise<ReservationByAnimalId> {
+async function getReservationAdditional(reservationId: string, animalId: string): Promise<ReservationByAnimalIdData> {
     const res = await client.get<GetReservationsByAnimalIdResponse>("/reservations_by_animal", {
         params: {
             id: animalId,

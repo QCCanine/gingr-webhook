@@ -1,9 +1,9 @@
-interface GetReservationsResponse {
+export interface GetReservationsResponse {
     error: boolean,
     data: GetReservationsResponseData
 }
 
-interface GetReservationsResponseData {
+export interface GetReservationsResponseData {
     [reservationId: string]: {
         reservation_id: string,
         standing_reservation: boolean,
@@ -59,7 +59,7 @@ interface GetReservationsResponseData {
     }
 }
 
-interface GetMedicationsResponse {
+export interface GetMedicationsResponse {
     medicationSchedules: Array<{
         id: string,
         time: string
@@ -100,7 +100,7 @@ interface GetMedicationsResponse {
     }
 }
 
-interface GetFeedingInfoResponse {
+export interface GetFeedingInfoResponse {
     feedingSchedules: Array<{
         id: string,
         time: string
@@ -145,12 +145,12 @@ interface GetFeedingInfoResponse {
     }
 }
 
-interface GetReservationsByAnimalIdResponse {
+export interface GetReservationsByAnimalIdResponse {
     success: boolean,
-    data: Array<ReservationByAnimalId>
+    data: Array<ReservationByAnimalIdData>
 }
 
-interface ReservationByAnimalId {
+interface ReservationData {
     a_id: string,
     animal_id: string,
     animal_name: string,
@@ -238,9 +238,36 @@ interface ReservationByAnimalId {
     cancelled_by_username: string | null,
     services_string: string,
     feeding_time: string,
-    feeding_amount: string,
+    feeding_amount: string
+}
+
+export interface ReservationByAnimalIdData extends ReservationData {
     check_in_stamp_formatted: string | null,
     check_out_stamp_formatted: string | null,
     start_date_formatted: string,
     end_date_formatted: string
+}
+
+export interface GingrWebhook<T> {
+    webhook_url: string,
+    webhook_type: string,
+    entity_id: number,
+    entity_type: string,
+    entity_data: T,
+    signature: string,
+    numberTries: number
+}
+
+export interface GingerReservationWebhook extends GingrWebhook<WebhookReservationData> {}
+
+interface WebhookReservationData extends ReservationData {
+    start_date_iso: string,
+    check_in_stamp_iso: string | null,
+    end_date_iso: string,
+    form: {
+        system_id: string,
+        notes: string,
+        submission_id: string,
+        is_dirty: string
+    }
 }
