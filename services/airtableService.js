@@ -172,11 +172,6 @@ async function getAllRecords() {
     return records;
 }
 
-/**
- * 
- * @param {Number} animalId Id of the animal from Gingr
- * @returns {Promise<Record>} Record in Airtable
- */
 async function getRecordByAnimalId(animalId) {
     const records = await table.select({
         filterByFormula: `{Animal Id} = ${animalId}`,
