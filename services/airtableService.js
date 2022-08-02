@@ -110,8 +110,6 @@ class AirtableService {
             "Feeding": Object.values(feeding).join('\n'),
             "Medication": medications.join('\n'),
             "Lunch": Lunch,
-            "Kongs/Dental Chews": entityData["services_string"],
-            "Grooming Services": entityData["services_string"],
         }
     }
 
