@@ -91,6 +91,8 @@ function reservationEventToRecord(reservation, medications, feedingSchedule, ser
         "Lunch": Lunch,
         "Kongs/Dental Chews": treats,
         "Grooming Services": grooming,
+        "Departure Date/Time": reservation["end_date_iso"],
+        "Type": reservation["type"],
     }
 }
 
@@ -106,8 +108,6 @@ function animalEventToRecord(entityData, medications, feedingSchedule, services)
         "Feeding": Object.values(feeding).join('\n'),
         "Medication": medications.join('\n'),
         "Lunch": Lunch,
-        "Kongs/Dental Chews": entityData["services_string"],
-        "Grooming Services": entityData["services_string"],
     }
 }
 
