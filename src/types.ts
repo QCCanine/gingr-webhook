@@ -1,30 +1,30 @@
-interface ReservationPartial {
+export interface ReservationPartial {
     id: string,
     animal: Animal,
     services: Array<Service>,
     departureTime: Date,
 }
 
-interface Reservation extends ReservationPartial {
+export interface Reservation extends ReservationPartial {
     feedingSchedules: Array<FeedingSchedule>
     medicationSchedules: Array<MedicationSchedule>,
     belongings: string | null,
     type: string
 }
 
-interface Animal {
+export interface Animal {
     id: string,
     name: string
 }
 
-interface FeedingSchedule {
+export interface FeedingSchedule {
     time: string,
     amount: string,
     unit: string,
     instructions: string
 }
 
-interface MedicationSchedule {
+export interface MedicationSchedule {
     time: string,
     unit: string,
     type: string,
@@ -32,7 +32,7 @@ interface MedicationSchedule {
     notes: string,
 }
 
-interface Service {
+export interface Service {
     name: string,
     time: Date,
 }

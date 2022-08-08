@@ -1,6 +1,6 @@
 import axios from 'axios';
-import FormData from 'form-data';
 import { getCheckedInReservations, getFeedingInfo, getMedicationInfo, getReservationsByAnimalId } from '../../clients/gingr/gingrClient';
+import { ReservationPartial, Reservation, MedicationSchedule, FeedingSchedule } from '../../types'
 
 const client = axios.create({
     baseURL: "https://queencitycanine.gingrapp.com/api/v1",
@@ -15,7 +15,7 @@ async function getReservations(): Promise<Array<Reservation>> {
     return Promise.all(partials.map(getReservationAdditional))
 }
 
-async function getReservationPartials(): Promise<Array<ReservationPartial>> {
+export async function getReservationPartials(): Promise<Array<ReservationPartial>> {
     const res = await getCheckedInReservations();
 
     return Object.values(res.data).map(r => ({
@@ -54,7 +54,7 @@ async function getReservationAdditional(reservation: ReservationPartial): Promis
     };
 }
 
-async function getMedicationSchedules(animalId: string): Promise<Array<MedicationSchedule>> {
+export async function getMedicationSchedules(animalId: string): Promise<Array<MedicationSchedule>> {
     const res = await getMedicationInfo(animalId)
 
     const schedules: { [id: string]: string} = 
@@ -104,7 +104,7 @@ async function getMedicationSchedules(animalId: string): Promise<Array<Medicatio
 //     )
 // }
 
-async function getFeedingSchedules(animalId: string): Promise<Array<FeedingSchedule>> {
+export async function getFeedingSchedules(animalId: string): Promise<Array<FeedingSchedule>> {
     const feedingInfo = await getFeedingInfo(animalId);
 
     return Object.values(feedingInfo[0].feedingSchedules).map(s => ({
