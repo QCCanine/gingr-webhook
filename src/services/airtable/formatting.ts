@@ -36,7 +36,7 @@ function formatServices(services: Array<Service>): { groomingServices: string | 
 
     const groomingStr = Object.entries<Array<Date>>(grooming)
         .reduce((acc: Array<string>, [name, times]) => {
-            times.forEach(t => acc.push(`${name} ${formatShortDatetime(t)}`))
+            times.forEach(t => acc.push(`${name} ${formatShortDateTime(t)}`))
             return acc
         }, [])
         .join('\n')
@@ -55,7 +55,7 @@ function formatShortDate(t: Date): string {
     return `${t.getMonth() + 1}/${t.getDate()}`
 }
 
-function formatShortDatetime(t: Date): string {
+function formatShortDateTime(t: Date): string {
     let hours = t.getHours() % 12
     hours = hours == 0 ? 12 : hours
 
