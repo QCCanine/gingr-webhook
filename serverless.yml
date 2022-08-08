@@ -19,7 +19,7 @@ provider:
 
 functions:
   handleEvent:
-    handler: handler.handleEvent
+    handler: src/handler.handleWebhook
     environment: 
       AIRTABLE_API_KEY: ${ssm:/gingr-webhooks/airtable-api-key}
       WEBHOOK_SIGNATURE_KEY: ${ssm:/gingr-webhooks/webhook-signature-key}
@@ -30,7 +30,7 @@ functions:
           method: post
 
   syncData:
-    handler: syncData.syncData
+    handler: src/handler.scheduledSync
     environment: 
       AIRTABLE_API_KEY: ${ssm:/gingr-webhooks/airtable-api-key}
       GINGR_API_KEY: ${ssm:/gingr-webhooks/gingr-api-key}

@@ -1,11 +1,8 @@
 "use strict";
 
-import { GingerReservationWebhook } from "../../clients/gingr/types";
-
-import Airtable, { FieldSet, Record, Records } from 'airtable';
-import { getMedicationSchedules, getFeedingSchedules, getReservationPartials } from '../gingr/gingrService';
-import { FeedingSchedule, MedicationSchedule, Reservation, Service } from '../../types'
+import Airtable, { Record, Records } from 'airtable';
 import chunk from 'lodash.chunk';
+import {  Reservation } from '../../types'
 import { reservationToFields } from "./formatting";
 import { DogFields } from "./types";
 
@@ -27,15 +24,15 @@ export async function addDog(reservation: Reservation): Promise<void> {
     await table.create(record, opts)
 }
 
-// async function getAllRecords() {
-//     let records = []
-//     await table.select().eachPage((page, next) => {
-//         records = records.concat(page);
-//         next();
-//     })
+export async function getAllRecords(): Promise<Records<DogFields>> {
+    let records: Records<DogFields> = []
+    await table.select().eachPage((page, next) => {
+        records = records.concat(page);
+        next();
+    })
 
-//     return records;
-// }
+    return records;
+}
 
 async function getRecordByAnimalId(animalId: string): Promise<Record<DogFields>> {
     const records = await table.select({
@@ -46,23 +43,23 @@ async function getRecordByAnimalId(animalId: string): Promise<Record<DogFields>>
     return records[0];
 }
 
-// async function createRecords(records) {
-//     chunk(records, 10).map(async recordChunk => {
-//         await table.create(recordChunk, opts)
-//     })
-// }
+export async function createRecords(records: Array<Partial<DogFields>>): Promise<void> {
+    chunk(records, 10).map(async (recordChunk: Array<Partial<DogFields>>) => {
+        await table.create(recordChunk, opts)
+    })
+}
 
-// async function updateRecords(records) {
-//     chunk(records, 10).map(async recordChunk => {
-//         await table.update(recordChunk, opts)
-//     })
-// }
+export async function updateRecords(records: Array<{ id: string, fields: Partial<DogFields>}>) {
+    chunk(records, 10).map(async (recordChunk: Array<{ id: string, fields: Partial<DogFields>}>) => {
+        await table.update(recordChunk, opts)
+    })
+}
 
-// async function deleteRecords(recordIds) {
-//     chunk(recordIds, 10).map(async recordIdChunk => {
-//         await table.destroy(recordIdChunk)
-//     })
-// }
+export async function deleteRecords(recordIds: Array<string>) {
+    chunk(recordIds, 10).map(async (recordIdChunk: Array<string>) => {
+        await table.destroy(recordIdChunk)
+    })
+}
 
 
 

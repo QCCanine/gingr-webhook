@@ -2,7 +2,7 @@ import { createHmac } from "crypto";
 import { GingerReservationWebhook, GingrWebhook } from "../clients/gingr/types";
 import { addDog, removeDog } from "../services/airtable/airtableService";
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { getFeedingSchedules, getMedicationSchedules, getReservationPartials } from "../services/gingr/gingrService";
+import { getFeedingSchedules, getMedicationSchedules, getCheckedInReservationPartials } from "../services/gingr/gingrService";
 import { Reservation } from "../types";
 
 export const SUCCESS_RESPONSE: APIGatewayProxyResult = { statusCode: 200, body: '' }
@@ -31,7 +31,7 @@ export async function checkIn(event: GingerReservationWebhook): Promise<APIGatew
     const [medicationSchedules, feedingSchedules, reservations] = await Promise.all([
         getMedicationSchedules(animalId),
         getFeedingSchedules(animalId),
-        getReservationPartials(),
+        getCheckedInReservationPartials(),
     ])
 
     const services = reservations[`${reservationId}`]?.services ?? [];

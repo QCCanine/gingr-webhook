@@ -7,7 +7,7 @@ export function reservationToFields(reservation: Reservation): Partial<DogFields
     const medicationSchedule = formatMedications(reservation.medicationSchedules)
 
     return {
-        "Animal Id": reservation.animal.id,
+        "Animal Id": parseInt(reservation.animal.id),
         "Dog": reservation.animal.name,
         "Feeding": feedingSchedule,
         "Belongings": reservation.belongings ?? undefined,

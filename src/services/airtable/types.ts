@@ -1,7 +1,7 @@
 import { FieldSet } from "airtable";
 
 export interface DogFields extends FieldSet {
-    "Animal Id": string,
+    "Animal Id": number,
     "Dog": string,
     "Feeding": string,
     "Belongings": string,

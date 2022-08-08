@@ -2,9 +2,10 @@
 
 import { hasValidSignature, checkIn, checkOut, SUCCESS_RESPONSE } from "./controllers/webhook";
 import { GingrWebhook } from "./clients/gingr/types";
-import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
+import { APIGatewayProxyResult, APIGatewayEvent, EventBridgeEvent } from 'aws-lambda';
+import { syncData } from "./controllers/syncData";
 
-module.exports.handleEvent = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+export async function handleWebhook(event: APIGatewayEvent): Promise<APIGatewayProxyResult> {
   if (event.body === null) {
     throw new Error("event body is empty")
   }
@@ -29,3 +30,7 @@ module.exports.handleEvent = async (event: APIGatewayEvent): Promise<APIGatewayP
       return SUCCESS_RESPONSE
   }
 };
+
+export async function scheduledSync(): Promise<void> {
+  await syncData();
+}
