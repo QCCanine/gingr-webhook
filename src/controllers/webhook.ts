@@ -1,6 +1,6 @@
 import { createHmac } from "crypto";
 import { GingerReservationWebhook, GingrWebhook } from "../clients/gingr/types";
-import { addDog } from "../services/airtable/airtableService";
+import { addDog, removeDog } from "../services/airtable/airtableService";
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { getFeedingSchedules, getMedicationSchedules, getReservationPartials } from "../services/gingr/gingrService";
 import { Reservation } from "../types";
@@ -54,12 +54,12 @@ export async function checkIn(event: GingerReservationWebhook): Promise<APIGatew
     return SUCCESS_RESPONSE;
 }
 
-// export async function checkOut(event: GingerReservationWebhook): Promise<APIGatewayProxyResult> {
-//     const animalId = event["entity_data"]["animal_id"]
-//     await removeDog(animalId);
+export async function checkOut(event: GingerReservationWebhook): Promise<APIGatewayProxyResult> {
+    const animalId = event["entity_data"]["animal_id"]
+    await removeDog(animalId);
 
-//     return SUCCESS_RESPONSE;
-// }
+    return SUCCESS_RESPONSE;
+}
 
 
 

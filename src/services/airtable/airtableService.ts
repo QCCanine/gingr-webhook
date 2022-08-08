@@ -2,7 +2,7 @@
 
 import { GingerReservationWebhook } from "../../clients/gingr/types";
 
-import Airtable, { FieldSet } from 'airtable';
+import Airtable, { FieldSet, Record, Records } from 'airtable';
 import { getMedicationSchedules, getFeedingSchedules, getReservationPartials } from '../gingr/gingrService';
 import { FeedingSchedule, MedicationSchedule, Reservation, Service } from '../../types'
 import chunk from 'lodash.chunk';
@@ -15,14 +15,14 @@ const opts = {
 
 const table = new Airtable().base('appd02u10BuFuz904').table<DogFields>("Dogs")
 
-// async function removeDog(animalId) {
-//     const record = await getRecordByAnimalId(animalId);
-//     if (record) {
-//         await record.destroy();
-//     }
-// }
+export async function removeDog(animalId: string): Promise<void> {
+    const record = await getRecordByAnimalId(animalId);
+    if (record) {
+        await record.destroy();
+    }
+}
 
-export async function addDog(reservation: Reservation) {
+export async function addDog(reservation: Reservation): Promise<void> {
     const record = reservationToFields(reservation)
     await table.create(record, opts)
 }
@@ -37,14 +37,14 @@ export async function addDog(reservation: Reservation) {
 //     return records;
 // }
 
-// async function getRecordByAnimalId(animalId) {
-//     const records = await table.select({
-//         filterByFormula: `{Animal Id} = ${animalId}`,
-//         fields: []
-//     }).firstPage();
+async function getRecordByAnimalId(animalId: string): Promise<Record<DogFields>> {
+    const records = await table.select({
+        filterByFormula: `{Animal Id} = ${animalId}`,
+        fields: []
+    }).firstPage();
 
-//     return records[0];
-// }
+    return records[0];
+}
 
 // async function createRecords(records) {
 //     chunk(records, 10).map(async recordChunk => {
@@ -63,8 +63,6 @@ export async function addDog(reservation: Reservation) {
 //         await table.destroy(recordIdChunk)
 //     })
 // }
-
-
 
 
 
