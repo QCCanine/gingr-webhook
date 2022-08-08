@@ -80,30 +80,6 @@ export async function getMedicationSchedules(animalId: string): Promise<Array<Me
     )
 }
 
-// function formatMedications(json) {
-//     const schedules = json["medicationSchedules"]
-//         .reduce((a, v) => ({ ...a, [v.id]: v.time }), {})
-
-//     const keys =
-//         Object.keys(json["animal_medication_schedules"])
-//             .map(k => parseInt(k))
-//             .sort()
-
-//     return keys.reduce((acc, k) =>
-//         acc.concat(
-//             json["animal_medication_schedules"][k].map(med => {
-//                 const sched = schedules[k];
-//                 const unit = med['medication_unit']['value_string'];
-//                 const type = med['medication_type']['value_string'];
-//                 const amount = med['medication_amount']['value_string'];
-//                 const notes = med['medication_notes']['value'];
-//                 return `${amount} ${unit} ${type} ${sched}: ${notes}`
-//             })
-//         ),
-//         []
-//     )
-// }
-
 export async function getFeedingSchedules(animalId: string): Promise<Array<FeedingSchedule>> {
     const feedingInfo = await getFeedingInfo(animalId);
 
