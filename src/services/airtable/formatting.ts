@@ -7,14 +7,14 @@ export function reservationToFields(reservation: Reservation): Partial<DogFields
     const medicationSchedule = formatMedications(reservation.medicationSchedules)
 
     return {
-        "Animal Id": parseInt(reservation.animal.id),
+        "Animal Id": parseInt(reservation.animal.id) ?? undefined,
         "Dog": reservation.animal.name,
-        "Feeding": feedingSchedule,
+        "Feeding": feedingSchedule ?? undefined,
         "Belongings": reservation.belongings ?? undefined,
-        "Medication": medicationSchedule,
-        "Lunch": lunchSchedule,
-        "Kongs/Dental Chews": treatServices,
-        "Grooming Services": groomingServices,
+        "Medication": medicationSchedule ?? undefined,
+        "Lunch": lunchSchedule ?? undefined,
+        "Kongs/Dental Chews": treatServices ?? undefined,
+        "Grooming Services": groomingServices ?? undefined,
         "Departure Date/Time": reservation.departureTime.toISOString(),
         "Type": reservation.type,
     }
@@ -23,7 +23,7 @@ export function reservationToFields(reservation: Reservation): Partial<DogFields
 
 const groomingServiceNames = new Set(["Basic Bath", "Nail Trim", "Brushing"])
 const treatServiceNames = new Set(["Kong Treat", "Dental Chew"])
-function formatServices(services: Array<Service>): { groomingServices: string | undefined, treatServices: string| undefined } {
+function formatServices(services: Array<Service>): { groomingServices: string | null, treatServices: string| null } {
     const { grooming, treat } = services.reduce((acc: { grooming: {[serviceName: string]: Array<Date>}, treat: {[serviceName: string]: Array<Date>} }, service: Service) => {
         if (groomingServiceNames.has(service.name)) {
             createOrAppend(acc.grooming, service.name, service.time)
@@ -48,7 +48,7 @@ function formatServices(services: Array<Service>): { groomingServices: string | 
         })
         .join('\n')
 
-    return { groomingServices: groomingStr ?? undefined, treatServices: treatStr ?? undefined}
+    return { groomingServices: groomingStr ?? null, treatServices: treatStr ?? null}
 }
 
 function formatShortDate(t: Date): string {
@@ -73,8 +73,8 @@ function createOrAppend(obj: object, key: any, value: any): object {
 }
 
 
-function formatFeedingSchedule(feedingSchedules: Array<FeedingSchedule>): { lunchSchedule: string | undefined, feedingSchedule: string | undefined } {
-    return feedingSchedules.reduce((acc: { lunchSchedule: string | undefined, feedingSchedule: string | undefined}, schedule: FeedingSchedule) => {
+function formatFeedingSchedule(feedingSchedules: Array<FeedingSchedule>): { lunchSchedule: string | null, feedingSchedule: string | null } {
+    return feedingSchedules.reduce((acc: { lunchSchedule: string | null, feedingSchedule: string | null}, schedule: FeedingSchedule) => {
         var line = `${schedule.amount} ${schedule.unit} ${schedule.time}`;
         const notes = schedule.instructions;
         if (notes) {
@@ -87,17 +87,17 @@ function formatFeedingSchedule(feedingSchedules: Array<FeedingSchedule>): { lunc
         }
 
         return acc;
-    }, { lunchSchedule: undefined, feedingSchedule: undefined})
+    }, { lunchSchedule: null, feedingSchedule: null})
 }
 
 
-function formatMedications(medicationSchedules: Array<MedicationSchedule>): string | undefined {
-    return medicationSchedules.reduce((acc: string | undefined, s: MedicationSchedule) => {
+function formatMedications(medicationSchedules: Array<MedicationSchedule>): string | null {
+    return medicationSchedules.reduce((acc: string | null, s: MedicationSchedule) => {
         var str = `${s.amount} ${s.unit} ${s.type} ${s.time}`;
         if (s.notes) {
             str += `: ${s.notes}`
         }
         
         return acc ? str : acc + `\n${str}`
-    }, undefined)
+    }, null)
 }
