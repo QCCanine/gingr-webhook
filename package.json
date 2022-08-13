@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "checkIn": "serverless invoke local --function handleEvent -p ./events/checkIn.json",
+    "checkOut": "serverless invoke local --function handleEvent -p ./events/checkOut.json"
+  },
   "dependencies": {
     "airtable": "^0.11.4",
     "axios": "^0.27.2",

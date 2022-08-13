@@ -1,8 +1,10 @@
 service: gingr-webhook
 frameworkVersion: '3'
+useDotenv: true
 	
 plugins:
   - serverless-api-gateway-throttling
+  - serverless-plugin-typescript
 
 custom:
   # Configures throttling settings for the API Gateway stage
@@ -16,6 +18,8 @@ provider:
   runtime: nodejs14.x
   deploymentMethod: direct
   stage: prod
+  environment: 
+    AIRTABLE_BASE_ID: appd02u10BuFuz904
 
 functions:
   handleEvent:

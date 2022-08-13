@@ -6,11 +6,15 @@ import {  Reservation } from '../../types'
 import { reservationToFields } from "./formatting";
 import { DogFields } from "./types";
 
+const baseId = process.env.AIRTABLE_BASE_ID
+if (baseId === undefined) {
+    throw new Error("environment variable AIRTABLE_BASE_ID is undefined")
+}
 const opts = {
     typecast: true
 }
 
-const table = new Airtable().base('appd02u10BuFuz904').table<DogFields>("Dogs")
+const table = new Airtable().base(baseId).table<DogFields>("Dogs")
 
 export async function removeDog(animalId: string): Promise<void> {
     const record = await getRecordByAnimalId(animalId);
