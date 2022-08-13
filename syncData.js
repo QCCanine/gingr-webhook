@@ -72,7 +72,7 @@ function reservationsToFields(reservations) {
 
             const reservationData = {
                 'animal_id': animalId,
-                'animal_name': reservation.animal.name,
+                'animal_name': reservation.animal.name + '/n' + reservation.owner.last_name,
                 'answer_1': reservationAdditional["answer_1"],
                 'end_date_iso': reservation['end_date'],
                 'type': reservationAdditional["type"]

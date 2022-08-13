@@ -106,7 +106,7 @@ class AirtableService {
         const { Lunch, ...feeding } = this.formatFeedingSchedule(feedingSchedule, isHouseFood)
         return {
             "Animal Id": entityData["a_id"],
-            "Dog": entityData["animal_name"],
+            "Dog": entityData["animal_name"] + '/n' + entityData["o_last"],
             "Feeding": Object.values(feeding).join('\n'),
             "Medication": medications.join('\n'),
             "Lunch": Lunch,
