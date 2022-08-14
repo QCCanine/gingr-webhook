@@ -74,30 +74,40 @@ function createOrAppend(obj: object, key: any, value: any): object {
 
 
 function formatFeedingSchedule(feedingSchedules: Array<FeedingSchedule>): { lunchSchedule: string | null, feedingSchedule: string | null } {
-    return feedingSchedules.reduce((acc: { lunchSchedule: string | null, feedingSchedule: string | null}, schedule: FeedingSchedule) => {
-        var line = `${schedule.amount} ${schedule.unit} ${schedule.time}`;
-        const notes = schedule.instructions;
-        if (notes) {
-            line += `: ${notes}`
-        }
-        if (schedule.time === "Lunch") {
-            acc.lunchSchedule = notes
-        } else {
-            acc.feedingSchedule = acc.feedingSchedule ? notes : `${acc.feedingSchedule}\n${notes}`
-        }
+    var feedingSchedule: string | null = null;
+    var lunchSchedule: string | null = null;
 
-        return acc;
-    }, { lunchSchedule: null, feedingSchedule: null})
+    feedingSchedules.forEach(schedule => {
+        var line = formatLine([schedule.amount, schedule.unit, schedule.time], schedule.instructions)
+        if (schedule.time === "Lunch") {
+            lunchSchedule = line
+        } else {
+            feedingSchedule = feedingSchedule ? `${feedingSchedule}\n${line}` : line
+        }
+    })
+
+    return { feedingSchedule, lunchSchedule }
 }
 
 
 function formatMedications(medicationSchedules: Array<MedicationSchedule>): string | null {
-    return medicationSchedules.reduce((acc: string | null, s: MedicationSchedule) => {
-        var str = `${s.amount} ${s.unit} ${s.type} ${s.time}`;
-        if (s.notes) {
-            str += `: ${s.notes}`
-        }
-        
-        return acc ? str : acc + `\n${str}`
-    }, null)
+    var medicationSchedule: string | null = null;
+
+    medicationSchedules.forEach(schedule => {
+        var line = formatLine([schedule.amount, schedule.unit, schedule.type, schedule.time], schedule.notes)
+        medicationSchedule = medicationSchedule ? `${medicationSchedule}\n${line}` : line
+    })
+
+    return medicationSchedule;
+}
+
+function formatLine(fields: Array<string | null>, additional: string | null): string {
+    // remove null elements and join
+    var line = fields.filter(x => x).join(" ")
+
+    if (additional) {
+        line += `: ${additional}`;
+    }
+
+    return line;
 }

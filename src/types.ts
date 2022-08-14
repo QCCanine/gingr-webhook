@@ -19,17 +19,17 @@ export interface Animal {
 
 export interface FeedingSchedule {
     time: string,
-    amount: string,
-    unit: string,
-    instructions: string
+    amount: string | null,
+    unit: string | null,
+    instructions: string | null
 }
 
 export interface MedicationSchedule {
     time: string,
-    unit: string,
-    type: string,
-    amount: string,
-    notes: string,
+    unit: string | null,
+    type: string | null,
+    amount: string | null,
+    notes: string | null,
 }
 
 export interface Service {

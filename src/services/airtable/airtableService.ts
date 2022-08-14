@@ -47,26 +47,27 @@ async function getRecordByAnimalId(animalId: string): Promise<Record<DogFields>>
     return records[0];
 }
 
-export async function createRecords(records: Array<Partial<DogFields>>): Promise<void> {
-    chunk(records, 10).map(async (recordChunk: Array<Partial<DogFields>>) => {
-        await table.create(recordChunk, opts)
-    })
-}
+export async function createRecords(recordFields: Array<Partial<DogFields>>): Promise<void> {
+    const records = recordFields.map(fields => ({ fields }))
+    return chunk(records, 10)
+        .map(async (recordChunk: { fields: Partial<DogFields> }[]) => {
+            await table.create(recordChunk, opts)
+        })
+    }
 
 export async function updateRecords(records: Array<{ id: string, fields: Partial<DogFields>}>) {
-    chunk(records, 10).map(async (recordChunk: Array<{ id: string, fields: Partial<DogFields>}>) => {
-        await table.update(recordChunk, opts)
-    })
+    return chunk(records, 10)
+        .map(async (recordChunk: { id: string, fields: Partial<DogFields>}[]) => {
+            await table.update(recordChunk, opts)
+        })
 }
 
 export async function deleteRecords(recordIds: Array<string>) {
-    chunk(recordIds, 10).map(async (recordIdChunk: Array<string>) => {
-        await table.destroy(recordIdChunk)
-    })
+    return chunk(recordIds, 10)
+        .map(async (recordIdChunk: string[]) => {
+            await table.destroy(recordIdChunk)
+        })
 }
-
-
-
 
 
 // async function updateDog(entityData) {
