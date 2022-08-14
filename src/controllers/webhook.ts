@@ -42,6 +42,9 @@ export async function checkIn(event: GingerReservationWebhook): Promise<APIGatew
             id: data.animal_id,
             name: data.animal_name
         },
+        owner: {
+            lastName: data.o_last,
+        },
         services,
         departureTime: new Date(data.end_date_iso),
         medicationSchedules,

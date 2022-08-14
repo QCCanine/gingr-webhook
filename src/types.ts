@@ -1,6 +1,7 @@
 export interface ReservationPartial {
     id: string,
     animal: Animal,
+    owner: Owner,
     services: Array<Service>,
     departureTime: Date,
 }
@@ -15,6 +16,10 @@ export interface Reservation extends ReservationPartial {
 export interface Animal {
     id: string,
     name: string
+}
+
+export interface Owner {
+    lastName: string
 }
 
 export interface FeedingSchedule {

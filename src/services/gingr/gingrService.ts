@@ -9,12 +9,6 @@ const client = axios.create({
     }
 })
 
-async function getReservations(): Promise<Array<Reservation>> {
-    const partials = await getCheckedInReservationPartials();
-
-    return Promise.all(partials.map(getReservationAdditional))
-}
-
 export async function getCheckedInReservationPartials(): Promise<Array<ReservationPartial>> {
     const res = await getCheckedInReservations();
 
@@ -23,6 +17,9 @@ export async function getCheckedInReservationPartials(): Promise<Array<Reservati
         animal: {
             id: r.animal.id,
             name: r.animal.name
+        },
+        owner: {
+            lastName: r.owner.last_name
         },
         services: r.services.map(s => ({ 
             name: s.name, time: 

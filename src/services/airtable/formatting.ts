@@ -8,7 +8,7 @@ export function reservationToFields(reservation: Reservation): Partial<DogFields
 
     return {
         "Animal Id": parseInt(reservation.animal.id) ?? undefined,
-        "Dog": reservation.animal.name,
+        "Dog": `${reservation.animal.name}\n${reservation.owner.lastName}`,
         "Feeding": feedingSchedule ?? undefined,
         "Belongings": reservation.belongings ?? undefined,
         "Medication": medicationSchedule ?? undefined,
