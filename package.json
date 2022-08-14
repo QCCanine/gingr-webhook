@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "checkIn": "serverless invoke local --function handleEvent -p ./events/checkIn.json",
+    "checkOut": "serverless invoke local --function handleEvent -p ./events/checkOut.json",
+    "sync": "serverless invoke local --function syncData"
+  },
   "dependencies": {
     "airtable": "^0.11.4",
     "axios": "^0.27.2",
@@ -6,6 +11,10 @@
     "lodash.chunk": "^4.2.0"
   },
   "devDependencies": {
-    "serverless-api-gateway-throttling": "^2.0.1"
+    "@types/aws-lambda": "^8.10.101",
+    "serverless-api-gateway-throttling": "^2.0.1",
+    "serverless-plugin-typescript": "^2.1.2",
+    "serverless-stage-manager": "^1.0.5",
+    "typescript": "^4.7.4"
   }
 }
