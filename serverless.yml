@@ -5,21 +5,26 @@ useDotenv: true
 plugins:
   - serverless-api-gateway-throttling
   - serverless-plugin-typescript
-
+  - serverless-stage-manager
 custom:
   # Configures throttling settings for the API Gateway stage
   # They apply to all http endpoints, unless specifically overridden
   apiGatewayThrottling:
     maxRequestsPerSecond: 100
     maxConcurrentRequests: 10
+  stages:
+    - dev
+    - prod
+  airtableBaseId:
+    dev: appkIVEko9VyjkIVP
+    prod: appd02u10BuFuz904
+
 
 provider:
   name: aws
   runtime: nodejs14.x
   deploymentMethod: direct
-  stage: prod
-  environment: 
-    AIRTABLE_BASE_ID: appd02u10BuFuz904
+  stage: ${opt:stage,'dev'}
 
 functions:
   handleEvent:
@@ -28,6 +33,7 @@ functions:
       AIRTABLE_API_KEY: ${ssm:/gingr-webhooks/airtable-api-key}
       WEBHOOK_SIGNATURE_KEY: ${ssm:/gingr-webhooks/webhook-signature-key}
       GINGR_API_KEY: ${ssm:/gingr-webhooks/gingr-api-key}
+      AIRTABLE_BASE_ID: ${self:custom.airtableBaseId.${self:provider.stage}}
     events:
       - httpApi:
           path: /
@@ -38,6 +44,7 @@ functions:
     environment: 
       AIRTABLE_API_KEY: ${ssm:/gingr-webhooks/airtable-api-key}
       GINGR_API_KEY: ${ssm:/gingr-webhooks/gingr-api-key}
+      AIRTABLE_BASE_ID: ${self:custom.airtableBaseId.${self:provider.stage}}
     events:
       - schedule:
           name: sync-data
