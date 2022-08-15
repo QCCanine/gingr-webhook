@@ -2,7 +2,7 @@
 
 import { createRecord, createRecords, deleteRecords, getAllRecords, getRecordByAnimalId, updateRecords } from '../../clients/airtable.ts/airtableClient';
 import { DogFields } from '../../clients/airtable.ts/types';
-import {  Reservation, ReservationPartial } from '../../types'
+import { Reservation, ReservationPartial } from '../../types'
 import { reservationToFields } from "./formatting";
 
 
@@ -72,8 +72,6 @@ export async function syncData(
         updateResponse,
         deleteResponse
     ])
-
-    console.log("Sync complete")
 }
 
 // async function updateDog(entityData) {
