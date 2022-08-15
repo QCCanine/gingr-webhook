@@ -21,7 +21,7 @@ export async function addDog(reservation: Reservation): Promise<void> {
 export async function syncData(
     getReservations: () => Promise<ReservationPartial[]>,
     getAdditional: (r: ReservationPartial) => Promise<Reservation> 
-) {
+): Promise<void>  {
     const [records, reservations] = await Promise.all([
         getAllRecords(),
         getReservations(),
