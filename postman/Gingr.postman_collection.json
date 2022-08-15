@@ -1,0 +1,309 @@
+{
+	"info": {
+		"_postman_id": "031ebb43-10b0-443e-9363-2e7d23b5e8d9",
+		"name": "Gingr",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Feeding Info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/get_feeding_info?key={{API_KEY}}&animal_id=382",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"get_feeding_info"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{API_KEY}}"
+						},
+						{
+							"key": "animal_id",
+							"value": "382"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Medications",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/get_medication_info?key={{API_KEY}}&animal_id=382",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"get_medication_info"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{API_KEY}}"
+						},
+						{
+							"key": "animal_id",
+							"value": "382"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reservation Types",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservation_types?key={{API_KEY}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservation_types"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{API_KEY}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Locations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/get_locations?key={{API_KEY}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"get_locations"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{API_KEY}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Back of House",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/back_of_house?key={{API_KEY}}&location_id=1&mins_future=7200",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"back_of_house"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{API_KEY}}"
+						},
+						{
+							"key": "location_id",
+							"value": "1"
+						},
+						{
+							"key": "type_ids",
+							"value": "[6]",
+							"disabled": true
+						},
+						{
+							"key": "full_day",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "mins_future",
+							"value": "7200"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reservations",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "location_id",
+							"value": "1",
+							"type": "default",
+							"disabled": true
+						},
+						{
+							"key": "start_date",
+							"value": "2022-07-20T00:00:00+00:00",
+							"type": "default",
+							"disabled": true
+						},
+						{
+							"key": "end_date",
+							"value": "2022-07-20T00:00:00+00:00",
+							"type": "default",
+							"disabled": true
+						},
+						{
+							"key": "checked_in",
+							"value": "true",
+							"type": "default"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/reservations?key={{API_KEY}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservations"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{API_KEY}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Services by Type",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/get_services_by_type?key={{API_KEY}}&type_id=4",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"get_services_by_type"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{API_KEY}}"
+						},
+						{
+							"key": "type_id",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Reservations by Animal",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "restrict_to",
+							"value": "currently_checked_in",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/reservations_by_animal?key={{API_KEY}}&id=931&restrict_to=pending_requests",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservations_by_animal"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{API_KEY}}"
+						},
+						{
+							"key": "id",
+							"value": "931"
+						},
+						{
+							"key": "restrict_to",
+							"value": "pending_requests"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_KEY",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "BASE_URL",
+			"value": "https://queencitycanine.gingrapp.com/api/v1",
+			"type": "default"
+		}
+	]
+}
