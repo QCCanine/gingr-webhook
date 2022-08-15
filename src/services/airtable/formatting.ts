@@ -1,5 +1,5 @@
+import { DogFields } from "../../clients/airtable.ts/types"
 import { FeedingSchedule, MedicationSchedule, Reservation, Service } from "../../types"
-import { DogFields } from "./types"
 
 export function reservationToFields(reservation: Reservation): Partial<DogFields> {
     const { lunchSchedule, feedingSchedule } = formatFeedingSchedule(reservation.feedingSchedules)
