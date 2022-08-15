@@ -1,6 +1,5 @@
 service: gingr-webhook
 frameworkVersion: '3'
-useDotenv: true
 	
 plugins:
   - serverless-api-gateway-throttling
