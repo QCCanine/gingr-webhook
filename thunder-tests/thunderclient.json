@@ -1,0 +1,244 @@
+[
+  {
+    "_id": "370241bc-1fd9-45c3-9383-bd84f23ee1d0",
+    "colId": "abab86d6-a279-4ba4-9d87-337722a890ce",
+    "containerId": "",
+    "name": "Get Feeding Info",
+    "url": "https://queencitycanine.gingrapp.com/api/v1/get_feeding_info?key={{API_KEY}}&animal_id=382",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2022-08-15T01:43:51.779Z",
+    "modified": "2022-08-15T01:49:41.696Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "key",
+        "value": "{{API_KEY}}",
+        "isPath": false
+      },
+      {
+        "name": "animal_id",
+        "value": "382",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "4b210495-24aa-4ed1-9ee6-4c4cb6a7e350",
+    "colId": "abab86d6-a279-4ba4-9d87-337722a890ce",
+    "containerId": "",
+    "name": "Get Medications",
+    "url": "https://queencitycanine.gingrapp.com/api/v1/get_medication_info?key={{API_KEY}}&animal_id=382",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2022-08-15T01:43:51.780Z",
+    "modified": "2022-08-15T01:50:06.914Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "key",
+        "value": "{{API_KEY}}",
+        "isPath": false
+      },
+      {
+        "name": "animal_id",
+        "value": "382",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "2a2bd794-2c73-48b7-a118-789dbb218f57",
+    "colId": "abab86d6-a279-4ba4-9d87-337722a890ce",
+    "containerId": "",
+    "name": "Reservation Types",
+    "url": "https://queencitycanine.gingrapp.com/api/v1/reservation_types?key={{API_KEY}}",
+    "method": "GET",
+    "sortNum": 30000,
+    "created": "2022-08-15T01:43:51.781Z",
+    "modified": "2022-08-15T01:50:10.211Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "key",
+        "value": "{{API_KEY}}",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "40c735f6-ac6b-49eb-9000-e6b1b5c90ae2",
+    "colId": "abab86d6-a279-4ba4-9d87-337722a890ce",
+    "containerId": "",
+    "name": "Locations",
+    "url": "https://queencitycanine.gingrapp.com/api/v1/get_locations?key={{API_KEY}}",
+    "method": "GET",
+    "sortNum": 40000,
+    "created": "2022-08-15T01:43:51.782Z",
+    "modified": "2022-08-15T01:50:13.338Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "key",
+        "value": "{{API_KEY}}",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "5e462807-b04f-49d4-8834-4ac10d1283f0",
+    "colId": "abab86d6-a279-4ba4-9d87-337722a890ce",
+    "containerId": "",
+    "name": "Back of House",
+    "url": "https://queencitycanine.gingrapp.com/api/v1/back_of_house?key={{API_KEY}}&location_id=1&mins_future=7200",
+    "method": "GET",
+    "sortNum": 50000,
+    "created": "2022-08-15T01:43:51.783Z",
+    "modified": "2022-08-15T01:50:18.836Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "key",
+        "value": "{{API_KEY}}",
+        "isPath": false
+      },
+      {
+        "name": "location_id",
+        "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "type_ids",
+        "value": "[6]",
+        "isDisabled": true,
+        "isPath": false
+      },
+      {
+        "name": "full_day",
+        "value": "true",
+        "isDisabled": true,
+        "isPath": false
+      },
+      {
+        "name": "mins_future",
+        "value": "7200",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "1e6f7733-d27c-4ad2-88f6-be68617d2f65",
+    "colId": "abab86d6-a279-4ba4-9d87-337722a890ce",
+    "containerId": "",
+    "name": "Reservations",
+    "url": "https://queencitycanine.gingrapp.com/api/v1/reservations?key={{API_KEY}}",
+    "method": "POST",
+    "sortNum": 60000,
+    "created": "2022-08-15T01:43:51.784Z",
+    "modified": "2022-08-15T01:50:25.282Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "key",
+        "value": "{{API_KEY}}",
+        "isPath": false
+      }
+    ],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "location_id",
+          "value": "1",
+          "isDisabled": true
+        },
+        {
+          "name": "start_date",
+          "value": "2022-07-20T00:00:00+00:00",
+          "isDisabled": true
+        },
+        {
+          "name": "end_date",
+          "value": "2022-07-20T00:00:00+00:00",
+          "isDisabled": true
+        },
+        {
+          "name": "checked_in",
+          "value": "true"
+        }
+      ]
+    },
+    "tests": []
+  },
+  {
+    "_id": "22b678f8-896f-4e66-96c2-43ff86c0ef80",
+    "colId": "abab86d6-a279-4ba4-9d87-337722a890ce",
+    "containerId": "",
+    "name": "Get Services by Type",
+    "url": "https://queencitycanine.gingrapp.com/api/v1/get_services_by_type?key={{API_KEY}}&type_id=4",
+    "method": "GET",
+    "sortNum": 70000,
+    "created": "2022-08-15T01:43:51.785Z",
+    "modified": "2022-08-15T01:50:29.558Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "key",
+        "value": "{{API_KEY}}",
+        "isPath": false
+      },
+      {
+        "name": "type_id",
+        "value": "4",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "f222a5e3-ca2b-4090-902d-10b2a96de208",
+    "colId": "abab86d6-a279-4ba4-9d87-337722a890ce",
+    "containerId": "",
+    "name": "Get Reservations by Animal",
+    "url": "https://queencitycanine.gingrapp.com/api/v1/reservations_by_animal?key={{API_KEY}}&id=931&restrict_to=pending_requests",
+    "method": "GET",
+    "sortNum": 80000,
+    "created": "2022-08-15T01:43:51.786Z",
+    "modified": "2022-08-15T01:50:33.186Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "key",
+        "value": "{{API_KEY}}",
+        "isPath": false
+      },
+      {
+        "name": "id",
+        "value": "931",
+        "isPath": false
+      },
+      {
+        "name": "restrict_to",
+        "value": "pending_requests",
+        "isPath": false
+      }
+    ],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "restrict_to",
+          "value": "currently_checked_in"
+        }
+      ]
+    },
+    "tests": []
+  }
+]
