@@ -2,8 +2,8 @@
 
 import { hasValidSignature, checkIn, checkOut, SUCCESS_RESPONSE } from "./controllers/webhook";
 import { GingrWebhook } from "./clients/gingr/types";
-import { APIGatewayProxyResult, APIGatewayEvent, EventBridgeEvent } from 'aws-lambda';
-import { syncData } from "./controllers/syncData";
+import { APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
+import { syncGingrData } from "./controllers/syncData";
 
 export async function handleWebhook(event: APIGatewayEvent): Promise<APIGatewayProxyResult> {
   if (event.body === null) {
@@ -32,5 +32,5 @@ export async function handleWebhook(event: APIGatewayEvent): Promise<APIGatewayP
 };
 
 export async function scheduledSync(): Promise<void> {
-  await syncData();
+  await syncGingrData();
 }

@@ -1,20 +1,10 @@
 "use strict";
 
-import Airtable, { Record, Records } from 'airtable';
-import chunk from 'lodash.chunk';
-import {  Reservation } from '../../types'
+import { createRecord, createRecords, deleteRecords, getAllRecords, getRecordByAnimalId, updateRecords } from '../../clients/airtable.ts/airtableClient';
+import { DogFields } from '../../clients/airtable.ts/types';
+import {  Reservation, ReservationPartial } from '../../types'
 import { reservationToFields } from "./formatting";
-import { DogFields } from "./types";
 
-const baseId = process.env.AIRTABLE_BASE_ID
-if (baseId === undefined) {
-    throw new Error("environment variable AIRTABLE_BASE_ID is undefined")
-}
-const opts = {
-    typecast: true
-}
-
-const table = new Airtable().base(baseId).table<DogFields>("Dogs")
 
 export async function removeDog(animalId: string): Promise<void> {
     const record = await getRecordByAnimalId(animalId);
@@ -24,51 +14,67 @@ export async function removeDog(animalId: string): Promise<void> {
 }
 
 export async function addDog(reservation: Reservation): Promise<void> {
-    const record = reservationToFields(reservation)
-    await table.create(record, opts)
+    const fields = reservationToFields(reservation)
+    await createRecord(fields)
 }
 
-export async function getAllRecords(): Promise<Records<DogFields>> {
-    let records: Records<DogFields> = []
-    await table.select().eachPage((page, next) => {
-        records = records.concat(page);
-        next();
+export async function syncData(
+    getReservations: () => Promise<ReservationPartial[]>,
+    getAdditional: (r: ReservationPartial) => Promise<Reservation> 
+) {
+    const [records, reservations] = await Promise.all([
+        getAllRecords(),
+        getReservations(),
+    ])
+
+    const reservationsByAnimalId: {[id: string]: ReservationPartial} = 
+        reservations.reduce((acc, reservation) => {
+            acc[reservation.animal.id] = reservation
+            return acc
+        }, {})
+
+    // Add, update or delete all records
+    const toUpdate: Array<{recordId: string, reservation: ReservationPartial}> = []
+    const toDelete: Array<string> = []
+    records.forEach(record => {
+        const animalId = `${record.fields['Animal Id']}`
+        const reservation = reservationsByAnimalId[animalId]
+        delete reservationsByAnimalId[animalId]
+
+        if (reservation) {
+            //update animal with reservation
+            toUpdate.push({ recordId: record.id, reservation })
+        } else {
+            // delete reservation
+            toDelete.push(record.id)
+        }
     })
 
-    return records;
+    const reservationsToFields = (reservations: ReservationPartial[]) => 
+        Promise.all(reservations.map(r => getAdditional(r).then(reservationToFields)))
+
+    const addResponse = reservationsToFields(Object.values(reservationsByAnimalId))
+        .then(createRecords)
+
+
+    const updateResponse = reservationsToFields(toUpdate.map(u => u.reservation))
+        .then(recordData =>
+            recordData.map<{id: string, fields: Partial<DogFields>}>((fields, i) => {
+                return { id: toUpdate[i].recordId, fields }
+            }
+            ))
+        .then(updateRecords)
+
+    const deleteResponse = deleteRecords(toDelete)
+
+    await Promise.all([
+        addResponse,
+        updateResponse,
+        deleteResponse
+    ])
+
+    console.log("Sync complete")
 }
-
-async function getRecordByAnimalId(animalId: string): Promise<Record<DogFields>> {
-    const records = await table.select({
-        filterByFormula: `{Animal Id} = ${animalId}`,
-        fields: []
-    }).firstPage();
-
-    return records[0];
-}
-
-export async function createRecords(recordFields: Array<Partial<DogFields>>): Promise<void> {
-    const records = recordFields.map(fields => ({ fields }))
-    return chunk(records, 10)
-        .map(async (recordChunk: { fields: Partial<DogFields> }[]) => {
-            await table.create(recordChunk, opts)
-        })
-    }
-
-export async function updateRecords(records: Array<{ id: string, fields: Partial<DogFields>}>) {
-    return chunk(records, 10)
-        .map(async (recordChunk: { id: string, fields: Partial<DogFields>}[]) => {
-            await table.update(recordChunk, opts)
-        })
-}
-
-export async function deleteRecords(recordIds: Array<string>) {
-    return chunk(recordIds, 10)
-        .map(async (recordIdChunk: string[]) => {
-            await table.destroy(recordIdChunk)
-        })
-}
-
 
 // async function updateDog(entityData) {
 //     const animalId = entityData['a_id']

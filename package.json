@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.101",
+    "@types/lodash.chunk": "^4.2.7",
     "serverless-api-gateway-throttling": "^2.0.1",
     "serverless-plugin-typescript": "^2.1.2",
     "serverless-stage-manager": "^1.0.5",
