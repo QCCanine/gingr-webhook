@@ -32,3 +32,5 @@ In order to simplify interacting with the Gingr API for testing purposes, a Thun
 1. Add your Gingr api key to the Local environment in `Thuder Client (VSCode Sidebar) > Env > Local Env > API_KEY`.
 
 Once that setup is complete, Gingr API routes can be tested in the collections tab of the extension.
+
+
