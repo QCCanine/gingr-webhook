@@ -22,7 +22,7 @@ export function reservationToFields(reservation: Reservation): Partial<DogFields
 
 
 const groomingServiceNames = new Set(["Basic Bath", "Nail Trim", "Brushing"])
-const treatServiceNames = new Set(["Kong Treat", "Dental Chew"])
+const treatServiceNames = new Set(["Kong Treat", "Dental Chew", "Calming Treat"])
 function formatServices(services: Array<Service>): { groomingServices: string | null, treatServices: string| null } {
     const { grooming, treat } = services.reduce((acc: { grooming: {[serviceName: string]: Array<Date>}, treat: {[serviceName: string]: Array<Date>} }, service: Service) => {
         if (groomingServiceNames.has(service.name)) {
