@@ -1,5 +1,6 @@
 import { DogFields } from "../../clients/airtable.ts/types"
 import { FeedingSchedule, MedicationSchedule, Reservation, Service } from "../../types"
+import { formatInTimeZone } from 'date-fns-tz'
 
 export function reservationToFields(reservation: Reservation): Partial<DogFields> {
     const { lunchSchedule, feedingSchedule } = formatFeedingSchedule(reservation.feedingSchedules)
@@ -36,31 +37,19 @@ function formatServices(services: Array<Service>): { groomingServices: string | 
 
     const groomingStr = Object.entries<Array<Date>>(grooming)
         .reduce((acc: Array<string>, [name, times]) => {
-            times.forEach(t => acc.push(`${name} ${formatShortDateTime(t)}`))
+            times.forEach(t => acc.push(`${name} ${formatInTimeZone(t, "America/New_York", "M/d h:mm")}`))
             return acc
         }, [])
         .join('\n')
 
     const treatStr = Object.entries<Array<Date>>(treat)
         .map(([name, times]) => {
-            const timeStr = times.map(formatShortDate).join(", ")
+            const timeStr = times.map(t => formatInTimeZone(t, "America/New_York", "M/d")).join(", ")
             return `${name} ${timeStr}`
         })
         .join('\n')
 
     return { groomingServices: groomingStr ?? null, treatServices: treatStr ?? null}
-}
-
-function formatShortDate(t: Date): string {
-    return `${t.getMonth() + 1}/${t.getDate()}`
-}
-
-function formatShortDateTime(t: Date): string {
-    let hours = t.getHours() % 12
-    hours = hours == 0 ? 12 : hours
-
-    const minutes = ('0' + t.getMinutes()).slice(-2)
-    return `${formatShortDate(t)} ${hours}:${minutes}`
 }
 
 function createOrAppend(obj: object, key: any, value: any): object {
