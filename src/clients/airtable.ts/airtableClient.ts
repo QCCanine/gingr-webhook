@@ -1,6 +1,7 @@
 import chunk from 'lodash.chunk';
 import Airtable, { Record, Records } from 'airtable';
 import { DogFields } from "./types";
+import { retry } from 'ts-retry-promise'
 
 const baseId = process.env.AIRTABLE_BASE_ID
 if (baseId === undefined) {
@@ -13,22 +14,26 @@ const opts = {
 const table = new Airtable().base(baseId).table<DogFields>("Dogs")
 
 export async function getRecordByAnimalId(animalId: string): Promise<Record<DogFields>> {
-    const records = await table.select({
-        filterByFormula: `{Animal Id} = ${animalId}`,
-        fields: []
-    }).firstPage();
+    return retry(async () => {
+        const records = await table.select({
+            filterByFormula: `{Animal Id} = ${animalId}`,
+            fields: []
+        }).firstPage();
 
-    return records[0];
+        return records[0];
+    }, { retries: 5 })
 }
 
 export async function getAllRecords(): Promise<Records<DogFields>> {
-    let records: Records<DogFields> = []
-    await table.select().eachPage((page, next) => {
-        records = records.concat(page);
-        next();
-    })
+    return retry(async () => {
+        let records: Records<DogFields> = []
+        await table.select().eachPage((page, next) => {
+            records = records.concat(page);
+            next();
+        })
 
-    return records;
+        return records;
+    }, { retries: 5 })
 }
 
 export async function createRecord(recordData: Partial<DogFields>): Promise<void> {
@@ -45,9 +50,9 @@ export async function createRecords(recordFields: Array<Partial<DogFields>>): Pr
 
 }
 
-export async function updateRecords(records: Array<{ id: string, fields: Partial<DogFields>}>): Promise<void> {
+export async function updateRecords(records: Array<{ id: string, fields: Partial<DogFields> }>): Promise<void> {
     await Promise.all(
-        chunk(records, 10).map(async (recordChunk: { id: string, fields: Partial<DogFields>}[]) => {
+        chunk(records, 10).map(async (recordChunk: { id: string, fields: Partial<DogFields> }[]) => {
             table.update(recordChunk, opts)
         })
     )
